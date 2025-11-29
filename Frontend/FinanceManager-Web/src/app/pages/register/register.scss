@@ -1,0 +1,32 @@
+:host{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.input-linha {
+  width: 100%;
+  padding: 8px 2px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+  font-family: 'Inter';
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.div-line{
+    width: 40%;
+    border-bottom: 2px solid var(--color-brand-primary);
+    box-shadow: var(--glow-primary);
+}
+
+.icon{
+    font-size: 1.6rem;
+}
+
+.form-btn{
+    margin-top: 0.8rem;
+}

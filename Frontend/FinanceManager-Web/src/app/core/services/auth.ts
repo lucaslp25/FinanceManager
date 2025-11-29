@@ -1,0 +1,29 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { LoginDTO, LoginResponseDTO, RegisterDTO, RegisterResponseDTO } from '../models/auth';
+import { catchError, Observable, throwError } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthService {
+
+  private http = inject(HttpClient);
+
+  private baseURL = 'http://localhost:8080/api/auth';
+
+  login(credentials: LoginDTO): Observable<LoginResponseDTO>{
+    return this.http.post<LoginResponseDTO>(`${this.baseURL}/login`, credentials)
+    .pipe(catchError(this.handleError));
+  }
+
+  register(credentials: RegisterDTO): Observable<RegisterResponseDTO>{
+    return this.http.post<RegisterResponseDTO>(`${this.baseURL}/register`, credentials)
+    .pipe(catchError(this.handleError));;
+  }
+  
+  handleError(err: any){
+    console.error('TaskAutentication Error: ', err);
+    return throwError(() => err);
+  }
+}

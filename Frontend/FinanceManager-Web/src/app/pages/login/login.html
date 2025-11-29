@@ -1,0 +1,28 @@
+<h1>Welcome to Finance Manager</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
+
+    <div class="title">
+        <div class="u-row u-align-center u-gap-sm">
+            <i class="bi bi-person-fill icon"></i>
+            <h3>Login</h3>
+        </div>
+        <div class="div-line"></div>
+    </div>
+
+    <input type="email" placeholder="E-mail" formControlName="email" class="input-linha">
+
+
+    <div class="u-col u-gap-sm">
+        <input type="password" placeholder="Password" formControlName="password"  class="input-linha">
+        <a href="#" class="forgot">Forgot the password?</a>
+    </div>
+
+    <button type="submit" class="form-btn">
+        <span *ngIf="!loading()">Enter</span>
+        <span *ngIf="loading()">Loading...</span>
+    </button>
+
+    <div class="without-account">
+        <span>Don´t have an account? <a (click)="onRegister()" class="register">Click for register!</a></span>
+    </div>
+</form>

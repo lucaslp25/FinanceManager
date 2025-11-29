@@ -1,1 +1,222 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+@import '@fontsource/roboto/300.css';
+@import '@fontsource/roboto/400.css'; 
+@import '@fontsource/roboto/500.css'; 
+@import '@fontsource/roboto/700.css'; 
+
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
+:root {
+    /* ===== BRAND COLORS ===== */
+  --color-brand-primary: #3F8CFF;    
+  --color-brand-primary-dark: #1D5FCC;
+  --color-brand-primary-light: #AFCFFF;
+
+  --color-brand-secondary: #FF7E36;   
+  --color-brand-secondary-dark: #CC5A1D;
+  --color-brand-secondary-light: #FFC1A1;
+
+  /* ===== FINANCE TONES ===== */
+  --color-profit: #00C853;    
+  --color-loss: #D50000;       
+  --color-warning: #FFB300;
+  --color-invest: #6A1B9A;     
+  --color-balance: #37474F;    
+
+  /* ===== GRAYS E NEUTRALS ===== */
+  --color-bg: #F5F7FA;
+  --color-bg-soft: #EEF1F5;
+  --color-surface: #FFFFFF;      
+  --color-line: #D6D9DF;
+  
+  --color-text-strong: #1C1F26;
+  --color-text-normal: #3A3F47;
+  --color-text-soft: #6D737C;
+  
+  /* ===== STATES ===== */
+  --color-success: #00C853;
+  --color-error: #E53935;
+  --color-info: #2979FF;
+  --color-alert: #FF9800;
+
+  /* ===== BUTTONS ===== */
+  --btn-primary-bg: var(--color-brand-primary);
+  --btn-primary-hover: var(--color-brand-primary-dark);
+
+  --btn-secondary-bg: var(--color-brand-secondary);
+  --btn-secondary-hover: var(--color-brand-secondary-dark);
+
+  /* ===== GRADIENTS ===== */
+  --gradient-finance: linear-gradient(135deg, #1BD19B, #1E93FF);
+  --gradient-profit: linear-gradient(135deg, #00C853, #1BD19B);
+  --gradient-dashboard: linear-gradient(135deg, #1E93FF, #6A1B9A);
+
+    /* ===== SHADOW SYSTEM ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.16);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.19);
+  --shadow-focus: 0 0 0 3px rgba(63, 140, 255, 0.35);        
+  --shadow-danger: 0 0 0 3px rgba(213, 0, 0, 0.35);         
+  --shadow-success: 0 0 0 3px rgba(0, 200, 83, 0.35);       
+
+
+  --glow-primary: 0 0 25px rgba(63, 140, 255, 0.55);
+  --glow-secondary: 0 0 25px rgba(255, 126, 54, 0.45);
+  --glow-profit: 0 0 20px rgba(0, 200, 83, 0.45);
+
+
+  // fonts & sizes // 
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2rem;
+
+  --font-family: 'Inter', 'Segoe UI', sans-serif;
+  --line-height: 1.5;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+
+  --radius-md: 10px;
+  --radius-lg: 20px;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* utils class */
+.u-padd-sm{
+    padding: var(--spacing-sm);
+}
+.u-padd-md{
+    padding: var(--spacing-md);
+}
+.u-padd-lg{
+  padding: var(--spacing-lg);
+}
+.u-margin-sm{
+    margin: var(--spacing-sm);
+  }
+.u-margin-md{
+    margin: var(--spacing-md);
+}
+.u-margin-lg{
+    margin: var(--spacing-lg);
+}
+.u-col{
+    display: flex;
+    flex-direction: column;
+}
+.u-row{
+    display: flex;
+    flex-direction: row;
+}
+.u-gap-sm{
+  gap: var(--spacing-sm)
+}
+.u-gap-md{
+    gap: var(--spacing-md)
+}
+.u-gap-lg{
+    gap: var(--spacing-lg)
+}
+.u-justify-center{
+    justify-content: center;
+}
+.u-align-center{
+    align-items: center;
+}
+.u-margin-bottom-sm{
+    margin-bottom: var(--spacing-sm);
+}
+.u-margin-bottom-md{
+    margin-bottom: var(--spacing-md);
+}
+.u-margin-bottom-lg{
+    margin-bottom: var(--spacing-lg);
+}
+.u-size-sm{
+    font-size: var(--font-size-sm);
+}
+.u-size-md{
+  font-size: var(--font-size-md);
+}
+.u-size-lg{
+    font-size: var(--font-size-lg);
+  }
+  .u-size-xl{
+    font-size: var(--font-size-xl);
+}
+
+    
+html, body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height);
+  background-color: var(--color-surface);
+  color: var(--color-text-normal);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100%;
+}
+
+.form-body {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--color-text-normal);
+}
+
+.form-input {
+  border: 1px solid #ddd;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-md);
+  transition: all 0.2s ease-in-out;
+}
+
+.form-input:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  outline: none;
+}
+
+.form-btn {
+  background-color: var(--color-brand-primary);
+  color: var(--color-surface);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.form-btn:hover {
+  background-color: var(--color-brand-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
