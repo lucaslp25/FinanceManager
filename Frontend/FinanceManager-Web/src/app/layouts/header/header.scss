@@ -1,0 +1,30 @@
+.form-btn{
+    background-color: var(--color-text-normal);
+}
+
+header{
+    background-color: var(--color-brand-secondary);
+    height: 10vh;
+    align-items: center;
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+}
+
+.menu{
+    display: flex;
+    align-items: center;
+    gap: 1.7rem;
+
+    i{
+        cursor: pointer;
+        font-size: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    i:hover{
+        transform: scale(1.03);
+
+    }
+
+}
