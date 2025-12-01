@@ -1,6 +1,8 @@
 package com.lpdev.financemanagerapi.security.services;
 
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerConflictException;
+import com.lpdev.financemanagerapi.model.entities.Wallet;
+import com.lpdev.financemanagerapi.repositories.WalletRepository;
 import com.lpdev.financemanagerapi.security.DTO.LoginDTO;
 import com.lpdev.financemanagerapi.security.DTO.LoginResponseDTO;
 import com.lpdev.financemanagerapi.security.DTO.RegisterDTO;
@@ -14,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -22,6 +26,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final WalletRepository walletRepository;
 
     @Transactional
     public RegisterResponseDTO userRegister(RegisterDTO dto){
@@ -37,11 +42,17 @@ public class UserService {
         User user = User.builder()
                 .firstName(dto.firstName())
                 .lastName(dto.lastName())
+                .username(dto.username())
                 .email(dto.email())
                 .password(pass)
                 .build();
 
         userRepository.save(user);
+
+        BigDecimal balance = BigDecimal.ZERO;
+        Wallet wallet = new Wallet(null, balance, user);
+
+        walletRepository.save(wallet);
 
         return new RegisterResponseDTO(user);
     }

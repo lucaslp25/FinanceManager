@@ -1,6 +1,6 @@
 package com.lpdev.financemanagerapi.security.model.entities;
 
-
+import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.security.model.enums.UserRole;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -54,6 +54,9 @@ public class User implements Serializable, UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToOne(mappedBy = "walletOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Wallet wallet;
 
     @Builder
     public User(String username, String email, String password, String firstName, String lastName){
