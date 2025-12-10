@@ -18,7 +18,7 @@
 }
 
 .div-line{
-    width: 40%;
+    width: 60%;
     border-bottom: 2px solid var(--color-brand-primary);
     box-shadow: var(--glow-primary);
 }
@@ -29,4 +29,13 @@
 
 .form-btn{
     margin-top: 0.8rem;
+}
+
+#back-to-login{
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover{
+        color: var(--color-text-strong);
+
+    }
 }

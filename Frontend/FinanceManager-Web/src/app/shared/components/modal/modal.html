@@ -1,0 +1,20 @@
+<div class="modal-background">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="u-row u-space-between u-align-center">
+                <div class="modal-title">{{title}}</div>
+                <i (click)="onClose()" class="bi bi-x icon-close"></i>
+            </div>
+            <div class="div-line"></div>
+        </div>
+
+        <div class="modal-body">
+            <ng-content></ng-content>
+        </div>
+        
+        <div class="modal-footer">
+            <button (click)="onConfirm()" class="modal-btn" style="background-color: var(--color-success);">Confirmar</button>
+            <button (click)="onClose()" class="modal-btn" style="background-color: var(--color-loss);">Cancelar</button>
+        </div>
+    </div>
+</div>

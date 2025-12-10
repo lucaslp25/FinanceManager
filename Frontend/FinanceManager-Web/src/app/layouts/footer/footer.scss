@@ -1,28 +1,43 @@
+
 footer{
-    background-color: #ddd;
-    display: flex;
+    background-color: var(--color-text-strong);
+    color: var(--color-text-soft);
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+
     align-items: center;
-    justify-content: space-around;
-    padding: 1rem;
-}
-.copy-rigth{
-    display: flex;
     text-align: center;
+    margin-top: auto;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    font-size: var(--font-size-sm);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .redes-sociais{
     ul{
         list-style: none;
         display: flex;
-        gap: 1rem;
+        justify-content: center;
+        gap: var(--spacing-md);
+        padding: 0;
     }
 
     a{
         text-decoration: none;
-        color: var(--color-text-normal);
+        color: var(--color-text-soft);
+        transition: all 0.3s ease;
+        font-size: 1rem;
+
+        display: flex; 
+        align-items: center;
+        gap: 5px;
+
+        &:hover{
+            color: var(--color-brand-secondary);
+            transform: translateY(-2px);
+        }
     }
 
-    a:hover{
-        text-decoration: underline;
-    }
 }

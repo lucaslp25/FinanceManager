@@ -1,0 +1,87 @@
+<div class="wallet-container">
+    <div class="u-col">
+        <div class="u-row title">
+            <h3>Minha Carteira</h3>
+            <i class="bi bi-wallet"></i>
+        </div>
+        <div class="div-line"></div>
+    </div>
+
+    <div class="wallet-body">
+
+        @if (state.myWallet(); as wallet) {
+            
+            <div>User ID: {{wallet.userId}}</div>
+            <div>Saldo: {{wallet.balance | currency: 'BRL'}}</div>
+            
+        }@else{
+            <span>Carregando dados da carteira...</span>
+        }
+
+    </div>
+
+    <div class="wallet-footer">
+        <button (click)="openAddSaldoModal()" class="wallet-button"><i class="bi bi-plus-circle"></i> Adicionar Saldo</button>
+        <button (click)="OpenWithdrawModal()" class="wallet-button" style="background-color: var(--color-loss);"><i class="bi bi-dash-circle"></i> Retirar Saldo</button>
+    </div>
+
+    @if(modalMode()){
+        <app-modal [title]="modalMode() == 'ADD' ? 'Adicionar Saldo' : 'Retirar Saldo'" (closeRequest)="closeModal()"
+         (confirmRequest)="confirmAdd()">
+            @if (modalMode() === 'ADD'){    
+                <div class="input-wrapper">
+                    <label class="form-label">Valor para adicionar</label>
+                    <input type="text"
+                    class="money-input"
+                    placeholder="R$ 0,00"
+                    [formControl]="amountControl"
+                    mask="separator.2"
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    prefix="R$"
+                    [dropSpecialCharacters]="true">
+                </div>
+            }
+            @if (modalMode() === 'WITHDRAW'){
+
+                <form [formGroup]="withdrawForm" class="form-withdraw">
+
+                    <div class="input-withdraw">
+                        <label class="form-label">Valor para retirar</label>
+                        <input type="text"
+                        class="money-input"
+                        placeholder="R$ 0,00"
+                        formControlName="amount"
+                        mask="separator.2"
+                        thousandSeparator="."
+                        decimalSeparator=","
+                        prefix="R$"
+                        [dropSpecialCharacters]="true">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="form-label">Categoria</label>
+                        <select class="form-input" formControlName="category">
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="FOOD">Alimentação</option>
+                            <option value="TRANSPORT">Transporte</option>
+                            <option value="LEISURE">Lazer</option>
+                            <option value="BILLS">Contas</option>
+                        </select>
+
+                        <div class="u-row u-align-center u-gap-sm geral-btn">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Nova</span>
+                        </div>
+                    </div>   
+
+                    <div class="input-description">
+                        <label class="form-label">Descrição</label>
+                        <input class="money-input" type="text" placeholder="Descrição (opcional)">
+                    </div>
+                </form>
+            }
+        </app-modal>
+    }
+
+</div>

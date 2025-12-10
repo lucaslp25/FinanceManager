@@ -164,17 +164,23 @@
   border-bottom: 1px solid var(--color-text-normal);
 }
 
+.u-space-between{
+  justify-content: space-between;
+}
+.u-space-around{
+  justify-content: space-around;
+}
+
     
 html, body {
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   line-height: var(--line-height);
-  background-color: var(--color-surface);
+
+  background-color: var(--color-bg);
   color: var(--color-text-normal);
+
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   height: 100vh;
   width: 100%;
 }
@@ -225,3 +231,19 @@ html, body {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
+
+.geral-btn{
+  background-color: #fff;
+  padding: var(--spacing-sm);
+  border-radius: var(--spacing-md);
+  font-family: 'Inter' sans-serif;
+  font-size: var(--font-size-md);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover{
+    transform: scale(1.02);
+  }
+
+}  

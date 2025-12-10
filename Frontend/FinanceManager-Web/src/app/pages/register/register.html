@@ -1,9 +1,12 @@
 <form [formGroup]="form" class="form-body" (ngSubmit)="onSubmit()">
 
       <div class="title">
-        <div class="u-row u-align-center u-gap-sm">
-            <i class="bi bi-person-fill icon"></i>
-            <h3>Register</h3>
+        <div class="u-row u-align-center u-gap-lg">
+            <i (click)="backToLogin()" id="back-to-login" class="bi bi-arrow-left icon" title="Back to login"></i>
+            <div class="u-row u-align-center u-gap-sm">
+                <i class="bi bi-person-fill icon"></i>
+                <h3>Register</h3>
+            </div>
         </div>
         <div class="div-line"></div>
     </div>

@@ -1,17 +1,19 @@
-<div class="app-container">
+<div class="app-layout" [class.sidebar-closed]="!ui.sidebarOpen()">
 
-    <header>
+    <header class="area-header">
         <app-header (logoutRequest)="logoutRequest()"></app-header>
     </header>
-    
-    <main>
 
+    <aside class="area-sidebar">
         <app-sidebar></app-sidebar>
-        <p>app works!</p>
+    </aside>
+    
+    <main class="area-content">
+        <router-outlet></router-outlet>
     </main>
 
-    <footer>
+    <footer class="area-footer">
         <app-footer></app-footer>   
     </footer>
-    
+
 </div>

@@ -4,6 +4,7 @@ import { App } from './pages/app/app';
 import { authGuard } from './core/guards/auth-guard';
 import { loginGuardGuard } from './core/guards/login-guard-guard';
 import { Register } from './pages/register/register';
+import { Wallet } from './core/components/wallet/wallet';
 
 export const routes: Routes = [
     // login is the default route 
@@ -12,7 +13,12 @@ export const routes: Routes = [
     {path: 'register', component: Register, title: 'Finance Manager - Register', canActivate: [loginGuardGuard]},
     
     {path: 'app', component: App, title: 'Finance Manager - Home', canActivate: [authGuard],
-        children: []
+        children: [
+
+            // default path of home -- wallet
+            {path: '', redirectTo: 'wallet', pathMatch: 'full'},
+            {path: 'wallet', component: Wallet, title: 'Minha Carteira', canActivate: [authGuard]}
+        ]
     },
     
     //for any unknowledge route, send to login page.

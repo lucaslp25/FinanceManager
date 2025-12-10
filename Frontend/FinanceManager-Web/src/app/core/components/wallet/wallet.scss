@@ -1,0 +1,116 @@
+:host{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    min-height: 100%;
+    width: 100%;
+}
+
+*{font-family: 'Inter', sans-serif;}
+
+.wallet-container{
+    background-color: var(--color-surface);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    width: 40%;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.title{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+
+    i{
+        font-size: var(--font-size-lg);
+    }
+}
+
+.div-line{
+    width: 75%;
+    margin-left: 3rem;
+    margin-top: 0.5rem;
+    border-bottom: 1px solid #888;
+}
+
+.wallet-body{
+    margin-top: var(--spacing-md);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-normal);
+}
+
+.wallet-footer{
+    margin-top: var(--spacing-md);
+    display: flex;
+    justify-content: space-around;
+}
+
+.wallet-button{
+    font-size: var(--font-size-md);
+    padding: var(--spacing-sm);
+    border-radius: 6px;
+    border: none;
+    color: #eeeeee; 
+    background-color: var(--color-profit);
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+
+    &:hover{
+        cursor: pointer;
+        transform: scale(1.02);
+    }
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  text-align: center;
+  margin: 20px 0;
+
+}
+
+.money-input {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--color-text-strong);  
+  text-align: center; 
+  padding: 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  
+  &:focus {
+    outline: none;
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.form-withdraw{
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-sm);
+    gap: var(--spacing-md);
+
+    .input-withdraw, .input-group, .input-description, .form-input{
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        &:focus {
+            outline: none;
+            border: 1px solid var(--color-line);
+            box-shadow: var(--shadow-md);
+        }
+    }
+}
+
+.geral-btn{
+    background-color: var(--color-surface);
+    color: var(--color-text-soft);
+}

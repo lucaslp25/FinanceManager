@@ -4,27 +4,31 @@
 
 header{
     background-color: var(--color-brand-secondary);
-    height: 10vh;
+    height: 70px;
     align-items: center;
     display: flex;
     padding: 1rem;
     justify-content: space-between;
+    box-shadow: var(--shadow-sm);
 }
 
 .menu{
+    font-size: var(--font-size-xl);
+    color: var(--color-text-normal);
     display: flex;
     align-items: center;
-    gap: 1.7rem;
-
+    gap: var(--spacing-md);
+    
+    
     i{
+        font-size: var(--font-size-xl);
+        color: var(--color-text-normal);
         cursor: pointer;
-        font-size: 2rem;
         transition: all 0.3s ease;
     }
-
+    
     i:hover{
         transform: scale(1.03);
-
+        color: var(--color-text-normal-strong);
     }
-
 }

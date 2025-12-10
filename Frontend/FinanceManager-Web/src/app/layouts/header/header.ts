@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Logo } from "../../core/components/logo/logo";
+import { UiService } from '../../core/services/ui-service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,13 @@ import { Logo } from "../../core/components/logo/logo";
 })
 export class Header {
 
+  private uiService = inject(UiService);
+  
   @Output() logoutRequest = new EventEmitter();
+  
+  toggleMenu(){
+    this.uiService.toggleSidebar();
+  }
 
   onLogout():void{
     this.logoutRequest.emit();

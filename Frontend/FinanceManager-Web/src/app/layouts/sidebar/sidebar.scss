@@ -1,8 +1,40 @@
-aside{
-    background-color: #ccc;
-    height: 100vh;
+:host{
     display: flex;
     flex-direction: column;
-    padding: 1rem;
-    align-items: center;
+    height: 100%;
+
+    background-color: var(--color-text-strong);
+
+    color: var(--color-bg-soft);
+    box-shadow: var(--shadow-md);
+
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--spacing-lg);
+  gap: var(--spacing-xs);
+}
+
+.nav-link    {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  cursor: pointer;
+    
+  color: var(--color-text-soft); 
+  text-decoration: none;
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  
+  border-left: 4px solid transparent; 
+
+  &:hover {
+    color: var(--color-surface);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
 }

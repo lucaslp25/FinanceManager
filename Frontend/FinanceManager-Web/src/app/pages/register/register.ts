@@ -57,7 +57,9 @@ export class Register {
       error: (err) => console.error("Error in register request: ", err),
       complete: () => this.loading.set(false)
     })
-
   }
 
+  backToLogin(){
+   this.router.navigate(['/login']); 
+  }
 }
