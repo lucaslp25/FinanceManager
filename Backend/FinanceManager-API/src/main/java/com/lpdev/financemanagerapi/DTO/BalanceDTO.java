@@ -1,4 +1,8 @@
 package com.lpdev.financemanagerapi.DTO;
 
-public record BalanceDTO() {
+import java.math.BigDecimal;
+
+public record BalanceDTO(
+        BigDecimal amount
+) {
 }

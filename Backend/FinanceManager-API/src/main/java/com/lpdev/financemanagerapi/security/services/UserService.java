@@ -1,6 +1,7 @@
 package com.lpdev.financemanagerapi.security.services;
 
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerConflictException;
+import com.lpdev.financemanagerapi.exceptions.FinanceManagerNotFoundException;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.repositories.WalletRepository;
 import com.lpdev.financemanagerapi.security.DTO.LoginDTO;
@@ -12,6 +13,7 @@ import com.lpdev.financemanagerapi.security.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +68,13 @@ public class UserService {
         String token = tokenService.generateToken(authenticatedUser);
 
         return new LoginResponseDTO(authenticatedUser, token);
+    }
+
+    @Transactional
+    public User findUserByAuth(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email).orElseThrow(()
+                -> new FinanceManagerNotFoundException("Not found user authenticated with email: " + email));
     }
 
 }

@@ -29,4 +29,12 @@ public class Wallet implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User walletOwner;
+
+    public void addBalance(BigDecimal amount){
+        balance = balance.add(amount);
+    }
+    public void decreaseBalance(BigDecimal amount){
+        balance = balance.subtract(amount);
+    }
+
 }
