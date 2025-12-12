@@ -9,6 +9,14 @@
 
 *{font-family: 'Inter', sans-serif;}
 
+
+.text-profit{
+    color: var(--color-profit);
+}
+.text-loss{
+    color: var(--color-loss);
+}
+
 .wallet-container{
     background-color: var(--color-surface);
     padding: 1rem;
@@ -113,4 +121,37 @@
 .geral-btn{
     background-color: var(--color-surface);
     color: var(--color-text-soft);
+    border: none;
+}
+
+.modal-footer{
+    // height: 15%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.modal-btn{
+    color: var(--color-bg);
+    padding: var(--spacing-sm);
+    border-radius: var(--spacing-sm);
+    border: none;
+    background-color: var(--color-text-normal);
+    font-size: var(--font-size-md);
+    font-family: 'Inter';
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+
+    &:hover{
+        transform: scale(1.01);
+        cursor: pointer;
+    }
+
+    &:first-child{
+        background-color: var(--color-success);
+    }
+
+    &:last-child{
+        background-color: var(--color-loss);
+    }
 }

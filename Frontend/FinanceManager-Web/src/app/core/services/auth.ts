@@ -23,7 +23,7 @@ export class AuthService {
   }
   
   handleError(err: any){
-    console.error('TaskAutentication Error: ', err);
+    console.error('FinanceAutentication Error: ', err);
     return throwError(() => err);
   }
 }

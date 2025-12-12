@@ -5,21 +5,21 @@
             <i (click)="backToLogin()" id="back-to-login" class="bi bi-arrow-left icon" title="Back to login"></i>
             <div class="u-row u-align-center u-gap-sm">
                 <i class="bi bi-person-fill icon"></i>
-                <h3>Register</h3>
+                <h3>Registro</h3>
             </div>
         </div>
         <div class="div-line"></div>
     </div>
 
-    <input type="text" placeholder="First Name" formControlName="firstName" class="input-linha">
-    <input type="text" placeholder="Last Name" formControlName="lastName" class="input-linha">
-    <input type="text" placeholder="Username (Optional)" formControlName="username" class="input-linha">
+    <input type="text" placeholder="Primeiro Nome" formControlName="firstName" class="input-linha">
+    <input type="text" placeholder="Último Nome" formControlName="lastName" class="input-linha">
+    <input type="text" placeholder="Username (Opcional)" formControlName="username" class="input-linha">
     <input type="email" placeholder="E-mail" formControlName="email" class="input-linha">
-    <input type="password" placeholder="Password" formControlName="password" class="input-linha">
-    <input type="password" placeholder="Confirm Password" formControlName="passwordConfirm" class="input-linha">
+    <input type="password" placeholder="Senha" formControlName="password" class="input-linha">
+    <input type="password" placeholder="Confirme sua Senha" formControlName="passwordConfirm" class="input-linha">
 
     <button class="form-btn" type="submit">
-        <span *ngIf="!loading()">Register</span>
-        <span *ngIf="loading()">Loading</span>
+        <span *ngIf="!loading()">Registrar-se</span>
+        <span *ngIf="loading()">Carregando...</span>
     </button>
 </form>

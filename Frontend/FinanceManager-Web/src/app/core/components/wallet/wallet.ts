@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Modal } from '../../../shared/components/modal/modal';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
+import { WithdrawCategory } from '../../services/withdraw-category';
 
 // control the modal state
 type ModalMode = 'ADD' | 'WITHDRAW' | null;
@@ -19,10 +20,35 @@ export class Wallet implements OnInit {
 
   public state = inject(WalletState);
   public fb = inject(FormBuilder);
+  public categoryService = inject(WithdrawCategory);
 
   public modalMode = signal<ModalMode>(null);
 
-  // public isBalanceOpen = signal(false);
+  public isCategoryModalOpen = signal(false);
+  newCategoryControl = new FormControl('', [Validators.required]);
+
+  openNewCategoryModal(){
+    this.newCategoryControl.reset();
+    this.isCategoryModalOpen.set(true);
+  };
+
+  saveNewCategory(){
+    if(this.newCategoryControl.invalid) return;
+
+    const name = this.newCategoryControl.value || '';
+
+    this.categoryService.createCategory(name).subscribe({
+      next: (next) => {
+        console.log("Adding new category: ", name);
+
+        // select automatic the category created
+        this.withdrawForm.get('category')?.setValue(next.id);
+
+        this.isCategoryModalOpen.set(false);
+      }, 
+      error: (err) => console.error("Error in add new category. ", err)
+    })
+  };
 
   // -- FORMS --
 
@@ -49,6 +75,38 @@ export class Wallet implements OnInit {
     this.modalMode.set(null);
   }
 
+  onNewCategory(value: string){
+    this.categoryService.createCategory(value).subscribe({
+      next: (next) => {
+        console.log("Adding new category: ", value);
+      }, 
+      error: (err) => console.error("Error in add new category. ", err)
+    });
+  }
+
+
+  confirmWithdraw(){
+    if(this.withdrawForm.invalid) return;
+
+    const dto = {
+      amount: this.withdrawForm.value.amount,
+      categoryId: this.withdrawForm.value.category,
+      description: this.withdrawForm.value.description
+    };
+
+    console.log(`DADOS DO MEU DTO: ${dto.amount}, ${dto.categoryId}, ${dto.description}`)
+
+    this.state.withdrawBalance(dto).subscribe({
+
+      next: (next) =>{
+        console.log(`send the ${dto} for backend...`);
+      },
+      error: (err) => {console.error('Error in request of add balance. ', err)}
+    });    
+    
+    this.closeModal();
+  }
+
   confirmAdd(){
     if (this.amountControl.invalid) return;
 
@@ -63,7 +121,7 @@ export class Wallet implements OnInit {
     }
     
     this.state.addBalance(dto).subscribe({
-      next: (next) => {console.log(`SALDO FOI ATUALIZADO.... ${next.balance}`)},
+      next: (next) => {console.log(`Balance updated --> ${next.newBalance}`)},
       error: (err) => {console.error('Error in request of add balance. ', err)}
     })
 

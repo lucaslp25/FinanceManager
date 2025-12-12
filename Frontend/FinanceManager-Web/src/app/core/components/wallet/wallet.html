@@ -10,9 +10,12 @@
     <div class="wallet-body">
 
         @if (state.myWallet(); as wallet) {
-            
-            <div>User ID: {{wallet.userId}}</div>
-            <div>Saldo: {{wallet.balance | currency: 'BRL'}}</div>
+            <div class="u-row u-gap-sm u-align-center">
+                <i class="bi bi-coin"></i>
+                <strong>Saldo: </strong> <span [ngClass]="{
+                    'text-profit': wallet.balance >= 0,
+                    'text-loss': wallet.balance < 0}">{{wallet.balance | currency: 'BRL'}}</span>
+            </div>
             
         }@else{
             <span>Carregando dados da carteira...</span>
@@ -26,8 +29,7 @@
     </div>
 
     @if(modalMode()){
-        <app-modal [title]="modalMode() == 'ADD' ? 'Adicionar Saldo' : 'Retirar Saldo'" (closeRequest)="closeModal()"
-         (confirmRequest)="confirmAdd()">
+        <app-modal [title]="modalMode() == 'ADD' ? 'Adicionar Saldo' : 'Retirar Saldo'" (closeRequest)="closeModal()">
             @if (modalMode() === 'ADD'){    
                 <div class="input-wrapper">
                     <label class="form-label">Valor para adicionar</label>
@@ -40,6 +42,11 @@
                     decimalSeparator=","
                     prefix="R$"
                     [dropSpecialCharacters]="true">
+                </div>
+
+                <div class="modal-footer">
+                    <button  (click)="confirmAdd()" class="modal-btn">Confirmar</button>
+                    <button  (click)="closeModal()" class="modal-btn">Cancelar</button>
                 </div>
             }
             @if (modalMode() === 'WITHDRAW'){
@@ -63,25 +70,50 @@
                         <label class="form-label">Categoria</label>
                         <select class="form-input" formControlName="category">
                             <option value="" disabled selected>Selecione...</option>
-                            <option value="FOOD">Alimentação</option>
-                            <option value="TRANSPORT">Transporte</option>
-                            <option value="LEISURE">Lazer</option>
-                            <option value="BILLS">Contas</option>
+                            @for (cat of categoryService.categories(); track cat.id) {
+                                <option [value]="cat.id">{{cat.name}}</option>
+                            }
                         </select>
 
-                        <div class="u-row u-align-center u-gap-sm geral-btn">
+                        <button (click)="openNewCategoryModal()" class="u-row u-align-center u-gap-sm geral-btn">
                             <i class="bi bi-plus-circle"></i>
                             <span>Nova</span>
-                        </div>
+                        </button>
                     </div>   
-
+                    
                     <div class="input-description">
                         <label class="form-label">Descrição</label>
-                        <input class="money-input" type="text" placeholder="Descrição (opcional)">
+                        <input class="money-input" type="text" placeholder="Descrição (opcional)" formControlName="description">
                     </div>
+
+                        
+                    <div class="modal-footer">
+                        <button  (click)="confirmWithdraw()" class="modal-btn">Confirmar</button>
+                        <button  (click)="closeModal()" class="modal-btn">Cancelar</button>
+                    </div>
+
                 </form>
             }
         </app-modal>
     }
-
+    
 </div>
+
+@if (isCategoryModalOpen()) {
+    <app-modal title="Nova Categoria" (closeRequest)="isCategoryModalOpen.set(false)" 
+    (confirmRequest)="saveNewCategory()">
+        <div class="input-wrapper">
+            <label class="form-label">Nome da Categoria</label>
+            <input type="text" 
+            class="form-input" 
+            [formControl]="newCategoryControl" 
+            placeholder="Ex: Investimentos, Contas..."
+            (keyup.enter)="saveNewCategory()"> 
+        </div>
+        
+        <div class="modal-footer">
+            <button  (click)="saveNewCategory()" class="modal-btn">Confirmar</button>
+            <button  (click)="closeModal()" class="modal-btn">Cancelar</button>
+        </div>
+    </app-modal>
+}

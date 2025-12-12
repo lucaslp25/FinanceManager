@@ -23,7 +23,7 @@
     flex-direction: column;
     width: 30%;
     height: auto;
-    min-height: 200px;
+    min-height: 300px;
     gap: var(--spacing-md);
 }
 
@@ -53,29 +53,9 @@
 }
 
 .modal-body{
-    height: 50%;
-}
-
-.modal-footer{
-    // height: 15%;
-    height: auto;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
-}
-
-.modal-btn{
-    color: var(--color-bg);
-    padding: var(--spacing-sm);
-    border-radius: var(--spacing-sm);
-    border: none;
-    background-color: var(--color-text-normal);
-    font-size: var(--font-size-md);
-    font-family: 'Inter';
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-
-    &:hover{
-        transform: scale(1.01);
-        cursor: pointer;
-    }
+    height: 75%;
+    flex: 1;
 }

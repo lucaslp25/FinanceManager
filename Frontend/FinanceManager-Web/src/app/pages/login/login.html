@@ -1,4 +1,7 @@
-<h1>Welcome to Finance Manager</h1>
+<div class="u-col main-title">
+    <h1>Bem-vindo ao Finance Manager</h1>
+    <h3>Sua ajuda diária com as suas finanças!</h3>
+</div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
 
     <div class="title">
@@ -13,16 +16,16 @@
 
 
     <div class="u-col u-gap-sm">
-        <input type="password" placeholder="Password" formControlName="password"  class="input-linha">
-        <a href="#" class="forgot">Forgot the password?</a>
+        <input type="password" placeholder="Senha" formControlName="password"  class="input-linha">
+        <a href="#" class="forgot">Esqueceu sua senha?</a>
     </div>
 
     <button type="submit" class="form-btn">
-        <span *ngIf="!loading()">Enter</span>
-        <span *ngIf="loading()">Loading...</span>
+        <span *ngIf="!loading()">Entrar</span>
+        <span *ngIf="loading()">Carregando...</span>
     </button>
 
     <div class="without-account">
-        <span>Don´t have an account? <a (click)="onRegister()" class="register">Click for register!</a></span>
+        <span>Não tem uma conta ainda? <a (click)="onRegister()" class="register">Clique aqui para se registrar!</a></span>
     </div>
 </form>
