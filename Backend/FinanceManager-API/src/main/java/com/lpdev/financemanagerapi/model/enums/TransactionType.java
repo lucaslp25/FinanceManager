@@ -2,7 +2,7 @@ package com.lpdev.financemanagerapi.model.enums;
 
 public enum TransactionType {
     DEPOSIT("deposit"),
-    WITHDRAWAL("withdraw");
+    WITHDRAW("withdraw");
 
     private String value;
     TransactionType(String value){

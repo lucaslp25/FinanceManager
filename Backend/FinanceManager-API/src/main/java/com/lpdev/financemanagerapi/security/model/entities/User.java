@@ -1,5 +1,6 @@
 package com.lpdev.financemanagerapi.security.model.entities;
 
+import com.lpdev.financemanagerapi.model.entities.Transaction;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.security.model.enums.UserRole;
 import jakarta.annotation.Nullable;
@@ -14,7 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -57,6 +60,10 @@ public class User implements Serializable, UserDetails {
 
     @OneToOne(mappedBy = "walletOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Wallet wallet;
+
+    // cascade ALL -- if exclude the user, exclude your all transactions.
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Transaction> transactions = new HashSet<>();
 
     @Builder
     public User(String username, String email, String password, String firstName, String lastName){
@@ -116,5 +123,9 @@ public class User implements Serializable, UserDetails {
         if (this.username == null || this.username.isEmpty()){
             this.username = this.firstName.toLowerCase() + "." + this.lastName.toLowerCase();
         }
+    }
+
+    public void addTransaction(Transaction transaction){
+        this.transactions.add(transaction);
     }
 }

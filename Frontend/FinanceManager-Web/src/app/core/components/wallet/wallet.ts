@@ -32,6 +32,10 @@ export class Wallet implements OnInit {
     this.isCategoryModalOpen.set(true);
   };
 
+  closeNewCategoryModal(){
+    this.isCategoryModalOpen.set(false);
+  }
+
   saveNewCategory(){
     if(this.newCategoryControl.invalid) return;
 
@@ -71,6 +75,7 @@ export class Wallet implements OnInit {
     this.modalMode.set('WITHDRAW');
   };
 
+ 
   closeModal(){
     this.modalMode.set(null);
   }

@@ -2,6 +2,7 @@ package com.lpdev.financemanagerapi.security.services;
 
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerConflictException;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerNotFoundException;
+import com.lpdev.financemanagerapi.model.entities.Transaction;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.repositories.WalletRepository;
 import com.lpdev.financemanagerapi.security.DTO.LoginDTO;
@@ -76,5 +77,13 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(()
                 -> new FinanceManagerNotFoundException("Not found user authenticated with email: " + email));
     }
+
+    public void addTransaction (Transaction transaction){
+        User user = findUserByAuth();
+        user.addTransaction(transaction);
+        userRepository.save(user);
+    }
+
+
 
 }

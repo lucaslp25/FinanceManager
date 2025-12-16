@@ -3,16 +3,15 @@ package com.lpdev.financemanagerapi.controllers;
 import com.lpdev.financemanagerapi.DTO.BalanceDTO;
 import com.lpdev.financemanagerapi.DTO.TransactionResponseDTO;
 import com.lpdev.financemanagerapi.DTO.WithdrawDTO;
+import com.lpdev.financemanagerapi.DTO.WithdrawTransactionResponseDTO;
 import com.lpdev.financemanagerapi.services.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/transaction")
@@ -34,5 +33,11 @@ public class TransactionController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
+    }
+
+    @GetMapping(value = "/withdraw-transactions")
+    public ResponseEntity<Set<WithdrawTransactionResponseDTO>> findAllWithdrawTransactions(){
+        Set<WithdrawTransactionResponseDTO> response = transactionService.findAllWithdrawTransactions();
+        return ResponseEntity.ok().body(response);
     }
 }

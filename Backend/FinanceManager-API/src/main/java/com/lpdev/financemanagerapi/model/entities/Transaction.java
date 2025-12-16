@@ -1,11 +1,13 @@
 package com.lpdev.financemanagerapi.model.entities;
 
 import com.lpdev.financemanagerapi.model.enums.TransactionType;
+import com.lpdev.financemanagerapi.security.model.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -25,6 +27,8 @@ public class Transaction implements Serializable {
     private BigDecimal amount;
     private String description;
 
+    private Instant date;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type")
     private TransactionType transactiontype;
@@ -32,5 +36,14 @@ public class Transaction implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "withdraw_category_id", referencedColumnName = "id")
     private WithdrawCategory withdrawCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = Instant.now();
+    }
 }
 

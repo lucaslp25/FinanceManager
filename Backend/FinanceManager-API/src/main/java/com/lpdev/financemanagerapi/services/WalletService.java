@@ -1,8 +1,6 @@
 package com.lpdev.financemanagerapi.services;
 
-import com.lpdev.financemanagerapi.DTO.BalanceDTO;
 import com.lpdev.financemanagerapi.DTO.WalletResponseDTO;
-import com.lpdev.financemanagerapi.DTO.WithdrawDTO;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerNotFoundException;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.model.enums.TransactionType;
@@ -41,13 +39,13 @@ public class WalletService {
         Wallet wallet = findWallet();
         log.info("Found wallet: {} ", wallet);
 
-        if (type == TransactionType.WITHDRAWAL){
+        if (type == TransactionType.WITHDRAW){
             wallet.decreaseBalance(amount);
         }else{
             wallet.addBalance(amount);
         }
 
-        String logMessage = TransactionType.WITHDRAWAL == type ? "The wallet withdraw has been successfully" : "The wallet deposit has been successfully";
+        String logMessage = TransactionType.WITHDRAW == type ? "The wallet withdraw has been successfully" : "The wallet deposit has been successfully";
 
         log.info(logMessage);
 

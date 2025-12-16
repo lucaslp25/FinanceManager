@@ -3,6 +3,7 @@ package com.lpdev.financemanagerapi.services;
 import com.lpdev.financemanagerapi.DTO.BalanceDTO;
 import com.lpdev.financemanagerapi.DTO.TransactionResponseDTO;
 import com.lpdev.financemanagerapi.DTO.WithdrawDTO;
+import com.lpdev.financemanagerapi.DTO.WithdrawTransactionResponseDTO;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerBadRequestException;
 import com.lpdev.financemanagerapi.model.entities.Transaction;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,12 +45,16 @@ public class TransactionService {
         transaction.setDescription("Deposit in value of " + dto.amount() + " to " + user.getEmail() + " account.");
         transaction.setAmount(dto.amount());
         transaction.setTransactiontype(TransactionType.DEPOSIT);
+        transaction.setUser(user);
+
         log.info("Transaction successfully deposited! value of {} to  {} account", dto.amount(), user.getEmail());
 
         // update the wallet value.
         Wallet wallet = walletService.updateBalance(dto.amount(), TransactionType.DEPOSIT);
 
         transactionRepository.save(transaction);
+
+        user.addTransaction(transaction);
 
         return new TransactionResponseDTO(transaction, wallet);
     }
@@ -74,18 +81,25 @@ public class TransactionService {
         String description = dto.description() != null ? dto.description() :
                 "Withdraw value of " + dto.amount() + " to " + user.getEmail() + " account.";
 
-
         Transaction transaction = new Transaction();
         transaction.setAmount(dto.amount());
-        transaction.setTransactiontype(TransactionType.WITHDRAWAL);
+        transaction.setTransactiontype(TransactionType.WITHDRAW);
         transaction.setWithdrawCategory(withdrawCategory);
         transaction.setDescription(description);
+        transaction.setUser(user);
 
-        Wallet wallet = walletService.updateBalance(dto.amount(), TransactionType.WITHDRAWAL);
+        Wallet wallet = walletService.updateBalance(dto.amount(), TransactionType.WITHDRAW);
 
         transactionRepository.save(transaction);
 
         return new TransactionResponseDTO(transaction, wallet);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<WithdrawTransactionResponseDTO> findAllWithdrawTransactions(){
+        User user = userService.findUserByAuth();
+        Set<Transaction> transactions = transactionRepository.myAllExpensesTransactions(user.getId());
+        return transactions.stream().map(WithdrawTransactionResponseDTO::new).collect(Collectors.toSet());
     }
 
 }

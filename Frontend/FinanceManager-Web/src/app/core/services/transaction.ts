@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BalanceDTO } from '../models/wallet';
 import { catchError, Observable, throwError } from 'rxjs';
-import { TransactionResponseDTO, WithdrawDTO } from '../models/transaction';
+import { TransactionResponseDTO, WithdrawDTO, WithdrawTransactionResponseDTO } from '../models/transaction';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,11 @@ export class Transaction {
   
   public withdrawBalance(dto: WithdrawDTO):Observable<TransactionResponseDTO>{
     return this.http.post<TransactionResponseDTO>(`${this.UrlBase}/withdraw`, dto)
+    .pipe(catchError(this.handleError));
+  }
+  
+  public loadMyExpenseList(): Observable<WithdrawTransactionResponseDTO[]>{
+    return this.http.get<WithdrawTransactionResponseDTO[]>(`${this.UrlBase}/withdraw-transactions`)
     .pipe(catchError(this.handleError));
   }
 
