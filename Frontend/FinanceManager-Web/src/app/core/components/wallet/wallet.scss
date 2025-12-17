@@ -10,7 +10,7 @@
 }
 
 @keyframes fadeIn {
-    from {opacity: 0; transform: scaleY(-10px);}
+    from {opacity: 0; transform: scaleY(10px);}
     to {opacity: 1; transform: scaleY(0);}
 }
 

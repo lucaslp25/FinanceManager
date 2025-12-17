@@ -4,10 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth';
 import { Router } from '@angular/router';
 import { RegisterDTO } from '../../core/models/auth';
+import { Footer } from "../../layouts/footer/footer";
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Footer],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })

@@ -1,0 +1,41 @@
+<div class="page-container">
+
+    <div class="header-section">
+        <div class="u-col">
+            <h3>Minhas categorias cadastradas</h3>
+            <span>Gerencie como seus gastos são agrupados!</span>
+        </div>
+        <div class="form-btn">
+            <i class="bi bi-plus"></i>
+            Nova categoria 
+        </div>
+    </div>
+
+    <div class="categories-grid">
+
+        <div class="category-card add-card">
+            <div class="icon-placeholder">
+                <i class="bi bi-plus-lg"></i>
+            </div>
+            <span>Criar Nova</span>
+        </div>
+
+        @for (cat of service.categories(); track cat.id){
+
+
+            <div class="category-card">
+                <i class="bi bi-tags icon-circle"></i>
+
+                <div class="card-content">
+                    <span class="category-name">{{cat.name}}</span>
+                </div>
+                    
+                <div class="u-row card-actions">
+                    <i class="bi bi-pencil edit btn-icon"></i>
+                    <i class="bi bi-trash3-fill delete btn-icon"></i>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

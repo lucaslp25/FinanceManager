@@ -1,11 +1,29 @@
 :host{
+    width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    justify-content: center;
+}
+
+.login-container{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     align-items: center;
-    height: 100vh;
-    gap: 3rem;
+    margin-bottom: 1.65rem;
+}
+
+.form-body{
+    gap: var(--spacing-md);
+}
+
+.title-container{
+    margin-top: 2em;
+    margin-bottom: 2em;
+    
+    .main-title{
+        text-align: center;
+    }
 }
 
 .forgot{
@@ -47,15 +65,10 @@
   border-bottom-color: var(--color-brand-primary); 
 }
 
-.form-body{
-    gap: 1.6rem
-}
-
 .div-line{
     width: 40%;
     border-bottom: 2px solid var(--color-brand-primary);
     box-shadow: var(--glow-primary);
-    
 }
 
 .title{
@@ -73,8 +86,4 @@
 
 .register{
     cursor: pointer;
-}
-
-.main-title{
-    text-align: center;
 }

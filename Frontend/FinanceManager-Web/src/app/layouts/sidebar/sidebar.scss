@@ -9,6 +9,7 @@
     box-shadow: var(--shadow-md);
 
     border-right: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
 }
 
 .sidebar-nav {
@@ -16,6 +17,12 @@
   flex-direction: column;
   padding-top: var(--spacing-lg);
   gap: var(--spacing-xs);
+
+  flex:1;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-bottom: var(--spacing-md); // for last item
 }
 
 .nav-link    {
@@ -30,6 +37,7 @@
   font-size: var(--font-size-md);
   font-weight: 500;
   transition: all 0.3s ease;
+
   
   border-left: 4px solid transparent; 
 
@@ -43,4 +51,53 @@
 .active{
   color: var(--color-brand-secondary);
   background-color: rgba(255, 255, 255, 0.05);
+}
+
+.aside-credits{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: var(--color-text-soft);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  justify-content: end;
+  
+  div a{
+    color: var(--color-text-soft);
+    transition: all 0.3s ease;
+    display: flex;
+    
+    &:hover{
+      display: flex;
+      color: var(--color-brand-secondary);
+      transform: translateY(-3px);
+      cursor: pointer;
+    }
+  }
+
+}
+
+aside{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  margin-bottom: 3px;
+}
+
+
+// scrollbar style   -- dark // 
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
 }

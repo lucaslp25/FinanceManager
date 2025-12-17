@@ -4,10 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { LoginDTO } from '../../core/models/auth';
+import { Footer } from "../../layouts/footer/footer";
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Footer],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

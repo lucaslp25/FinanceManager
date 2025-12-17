@@ -16,7 +16,6 @@
     grid-template-areas: 
         "header header"
         "sidebar content"
-        "footer footer"
     ;
 
     transition: all 0.3s ease;
@@ -32,10 +31,6 @@
     grid-area: sidebar;
     border-right: 1px solid #e0e0e0;
     overflow-y: auto;
-}
-
-.area-footer{
-    grid-area: footer;
 }
 
 .area-content{

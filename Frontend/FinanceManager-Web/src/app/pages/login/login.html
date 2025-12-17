@@ -1,31 +1,39 @@
-<div class="u-col main-title">
-    <h1>Bem-vindo ao Finance Manager</h1>
-    <h3>Sua ajuda diária com as suas finanças!</h3>
-</div>
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
-
-    <div class="title">
-        <div class="u-row u-align-center u-gap-sm">
-            <i class="bi bi-person-fill icon"></i>
-            <h3>Login</h3>
+<div class="login-container">
+    <div class="title-container">
+        <div class="u-col main-title">
+            <h1>Bem-vindo ao Finance Manager</h1>
+            <h3>Sua ajuda diária com as suas finanças!</h3>
         </div>
-        <div class="div-line"></div>
     </div>
 
-    <input type="email" placeholder="E-mail" formControlName="email" class="input-linha">
+    <div class="login-form-container">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">        
+            <div class="title">
+                <div class="u-row u-align-center u-gap-sm">
+                    <i class="bi bi-person-fill icon"></i>
+                    <h3>Login</h3>
+                </div>
+                <div class="div-line"></div>
+            </div>
+            
+            <input type="email" placeholder="E-mail" formControlName="email" class="input-linha">
+            
 
+            <div class="u-col u-gap-sm">
+                <input type="password" placeholder="Senha" formControlName="password"  class="input-linha">
+                <a href="#" class="forgot">Esqueceu sua senha?</a>
+            </div>
 
-    <div class="u-col u-gap-sm">
-        <input type="password" placeholder="Senha" formControlName="password"  class="input-linha">
-        <a href="#" class="forgot">Esqueceu sua senha?</a>
+            <button type="submit" class="form-btn">
+                <span *ngIf="!loading()">Entrar</span>
+            <span *ngIf="loading()">Carregando...</span>
+            </button>
+            
+            <div class="without-account">
+                <span>Não tem uma conta ainda? <a (click)="onRegister()" class="register">Clique aqui para se registrar!</a></span>
+            </div>
+        </form>
     </div>
+</div>
 
-    <button type="submit" class="form-btn">
-        <span *ngIf="!loading()">Entrar</span>
-        <span *ngIf="loading()">Carregando...</span>
-    </button>
-
-    <div class="without-account">
-        <span>Não tem uma conta ainda? <a (click)="onRegister()" class="register">Clique aqui para se registrar!</a></span>
-    </div>
-</form>
+<app-footer></app-footer>

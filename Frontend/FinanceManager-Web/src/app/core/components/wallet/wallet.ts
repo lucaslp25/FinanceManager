@@ -5,6 +5,7 @@ import { Modal } from '../../../shared/components/modal/modal';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { WithdrawCategory } from '../../services/withdraw-category';
+import { Footer } from "../../../layouts/footer/footer";
 
 // control the modal state
 type ModalMode = 'ADD' | 'WITHDRAW' | null;
@@ -12,7 +13,7 @@ type ModalMode = 'ADD' | 'WITHDRAW' | null;
 @Component({
   selector: 'app-wallet',
   standalone: true,
-  imports: [CommonModule, Modal, ReactiveFormsModule, NgxMaskDirective],
+  imports: [CommonModule, Modal, ReactiveFormsModule, NgxMaskDirective, Footer],
   templateUrl: './wallet.html',
   styleUrl: './wallet.scss',
 })

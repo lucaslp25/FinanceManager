@@ -1,3 +1,8 @@
+:host {
+    display: block;
+    width: 100%;
+    margin-top: auto;
+}
 
 footer{
     background-color: var(--color-text-strong);
@@ -13,6 +18,7 @@ footer{
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     font-size: var(--font-size-sm);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    width: 100%;
 }
 
 .redes-sociais{
