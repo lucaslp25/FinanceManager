@@ -32,3 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 /system-functions
+
+.env
+backup_inicial.sql
+/configuration/InitialDatabasePopulation

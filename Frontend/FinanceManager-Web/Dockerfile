@@ -1,0 +1,31 @@
+
+# a complete node image for have the build tools
+FROM node:22-alpine AS build
+
+WORKDIR /app
+
+# Copy the dependency files
+COPY package*.json ./
+
+# install all dependencies
+RUN npm ci
+
+# copy the code
+COPY . .
+
+# compile for production (generate the dist/)
+RUN npm run build -- --configuration production
+
+FROM nginx:alpine
+
+# remove the default config of nginx
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copia a nossa configuração customizada (vamos criar no passo 2)
+COPY nginx.conf /etc/nginx/conf.d/
+
+# copy the compiled files of prev step for the nginx
+COPY --from=build /app/dist/FinanceManager-Web/browser /usr/share/nginx/html
+
+# expose the port 80
+EXPOSE 80

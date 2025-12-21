@@ -1,0 +1,30 @@
+# --- Dados e Backups ---
+*.sql
+*.dump
+postgres_data/
+docker-volumes/
+.env
+backup_inicial.sql
+*.env
+
+# --- Logs e Sistema ---
+*.log
+.DS_Store
+Thumbs.db
+
+# --- Java / Spring Boot ---
+target/
+**/*.class
+.mvn/
+mvnw
+mvnw.cmd
+
+# --- Angular / Node ---
+node_modules/
+dist/
+.angular/
+
+# --- IDEs ---
+.idea/
+.vscode/
+*.iml

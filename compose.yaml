@@ -1,0 +1,76 @@
+services:
+
+  # Database
+  finance-db:
+    image: postgres:15-alpine
+    container_name: finance_db_prod
+    restart: always
+    ports:
+      - "5433:5432" # external port 5433
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - finance-net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Back-end
+  finance_manager-api:
+    build:
+      context: ./Backend/FinanceManager-API
+      dockerfile: Dockerfile
+    container_name: finance_manager-api
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      finance-db:
+        condition: service_healthy # starts only when the database is ok
+    networks:
+      - finance-net
+
+ # database admin
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: finance_pgadmin
+    restart: always
+    ports:
+      - "5050:80" # acess in localhost:5050
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    networks:
+      - finance-net
+    depends_on:
+      - finance-db
+  
+  finance_manager-web:
+    build: 
+      context: ./Frontend/FinanceManager-Web
+      dockerfile: Dockerfile
+    container_name: finance_manager-web
+    restart: always
+    ports:
+      - "80:80" # just localhost
+    networks:
+      - finance-net
+    depends_on:
+      - finance_manager-api
+
+
+
+volumes:
+  postgres_data:
+
+networks:
+  finance-net:
+    driver: bridge
