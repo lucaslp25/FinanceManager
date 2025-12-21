@@ -31,4 +31,17 @@ public class WithdrawCategoryController {
                 .path("/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
+
+    @PutMapping(value = "/{id}/update")
+    public ResponseEntity<WithdrawCategoryResponseDTO> updateCategory(@RequestBody WithdrawCategoryDTO dto, @PathVariable Long id){
+        WithdrawCategoryResponseDTO response = service.updateCategory(id, dto);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping(value = "/{id}/delete")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id){
+        service.deleteCategory(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

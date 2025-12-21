@@ -70,7 +70,7 @@
                         <label class="form-label">Categoria</label>
                         <select class="form-input" formControlName="category">
                             <option value="" disabled selected>Selecione...</option>
-                            @for (cat of categoryService.categories(); track cat.id) {
+                            @for (cat of categoryState.categories(); track cat.id) {
                                 <option [value]="cat.id">{{cat.name}}</option>
                             }
                         </select>

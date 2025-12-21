@@ -2,6 +2,7 @@ package com.lpdev.financemanagerapi.services;
 
 import com.lpdev.financemanagerapi.DTO.WithdrawCategoryDTO;
 import com.lpdev.financemanagerapi.DTO.WithdrawCategoryResponseDTO;
+import com.lpdev.financemanagerapi.exceptions.FinanceManagerBadRequestException;
 import com.lpdev.financemanagerapi.model.entities.WithdrawCategory;
 import com.lpdev.financemanagerapi.repositories.WithdrawCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,27 @@ public class WithdrawCategoryService {
         return new WithdrawCategoryResponseDTO(newCategory);
     }
 
+    @Transactional
+    public WithdrawCategoryResponseDTO updateCategory(Long id, WithdrawCategoryDTO dto){
+        WithdrawCategory category = findById(id);
+        category.setName(dto.name().toUpperCase());
+        withdrawCategoryRepository.save(category);
+        return new WithdrawCategoryResponseDTO(category);
+    }
+
+    @Transactional
+    public void deleteCategory(Long id){
+        if (!withdrawCategoryRepository.existsById(id)){
+            throw new FinanceManagerBadRequestException("Cannot find category with id: " + id);
+        }
+        withdrawCategoryRepository.deleteById(id);
+    }
+
     @Transactional(readOnly = true)
     protected WithdrawCategory findById(Long id){
         return withdrawCategoryRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("No WithdrawCategory found with id: " + id));
     }
+
+
 }

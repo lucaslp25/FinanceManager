@@ -19,7 +19,7 @@ export class AuthService {
 
   register(credentials: RegisterDTO): Observable<RegisterResponseDTO>{
     return this.http.post<RegisterResponseDTO>(`${this.baseURL}/register`, credentials)
-    .pipe(catchError(this.handleError));;
+    .pipe(catchError(this.handleError));
   }
   
   handleError(err: any){

@@ -4,7 +4,6 @@ import { Wallet } from '../services/wallet';
 import { catchError, tap, throwError } from 'rxjs';
 import { Transaction } from '../services/transaction';
 import { TransactionResponseDTO, WithdrawDTO } from '../models/transaction';
-import { WithdrawCategoryResponseDTO } from '../services/withdraw-category';
 
 @Injectable({
   providedIn: 'root',

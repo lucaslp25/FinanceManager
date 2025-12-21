@@ -22,6 +22,6 @@ public class WithdrawCategory implements Serializable {
 
     private String name;
 
-    @OneToMany(mappedBy = "withdrawCategory", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "withdrawCategory", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Transaction> transaction = new ArrayList<>();
 }

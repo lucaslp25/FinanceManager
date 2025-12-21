@@ -4,8 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Modal } from '../../../shared/components/modal/modal';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
-import { WithdrawCategory } from '../../services/withdraw-category';
-import { Footer } from "../../../layouts/footer/footer";
+import { WithdrawCategoryState } from '../../states/withdraw-category-state';
 
 // control the modal state
 type ModalMode = 'ADD' | 'WITHDRAW' | null;
@@ -13,15 +12,16 @@ type ModalMode = 'ADD' | 'WITHDRAW' | null;
 @Component({
   selector: 'app-wallet',
   standalone: true,
-  imports: [CommonModule, Modal, ReactiveFormsModule, NgxMaskDirective, Footer],
+  imports: [CommonModule, Modal, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './wallet.html',
   styleUrl: './wallet.scss',
 })
 export class Wallet implements OnInit {
 
   public state = inject(WalletState);
+  public withdrawState = inject(WithdrawCategoryState);
   public fb = inject(FormBuilder);
-  public categoryService = inject(WithdrawCategory);
+  public categoryState = inject(WithdrawCategoryState);
 
   public modalMode = signal<ModalMode>(null);
 
@@ -42,16 +42,10 @@ export class Wallet implements OnInit {
 
     const name = this.newCategoryControl.value || '';
 
-    this.categoryService.createCategory(name).subscribe({
-      next: (next) => {
-        console.log("Adding new category: ", name);
-
-        // select automatic the category created
-        this.withdrawForm.get('category')?.setValue(next.id);
-
-        this.isCategoryModalOpen.set(false);
-      }, 
-      error: (err) => console.error("Error in add new category. ", err)
+    this.categoryState.create(name).subscribe({
+      next: () =>{
+        this.closeNewCategoryModal();
+      }
     })
   };
 
@@ -82,12 +76,7 @@ export class Wallet implements OnInit {
   }
 
   onNewCategory(value: string){
-    this.categoryService.createCategory(value).subscribe({
-      next: (next) => {
-        console.log("Adding new category: ", value);
-      }, 
-      error: (err) => console.error("Error in add new category. ", err)
-    });
+    this.categoryState.create(value);
   }
 
 
@@ -141,6 +130,8 @@ export class Wallet implements OnInit {
       },
       error: (err) => console.error("Error in Wallet component: ", err)
     });
+
+    this.withdrawState.load();
   }
 
 }

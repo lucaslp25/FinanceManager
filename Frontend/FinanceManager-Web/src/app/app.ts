@@ -1,6 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { WithdrawCategory } from './core/services/withdraw-category';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +7,6 @@ import { WithdrawCategory } from './core/services/withdraw-category';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App implements OnInit{
-  protected readonly title = signal('FinanceManager-Web');
+export class App{
 
-  private categoryService = inject(WithdrawCategory);
-
-  ngOnInit(): void {
-    this.categoryService.loadWithdrawCategories();
-  };
 }

@@ -5,7 +5,7 @@
             <h3>Minhas categorias cadastradas</h3>
             <span>Gerencie como seus gastos são agrupados!</span>
         </div>
-        <div class="form-btn">
+        <div (click)="onNewCategory()" class="form-btn">
             <i class="bi bi-plus"></i>
             Nova categoria 
         </div>
@@ -13,15 +13,14 @@
 
     <div class="categories-grid">
 
-        <div class="category-card add-card">
+        <div (click)="onNewCategory()" class="category-card add-card">
             <div class="icon-placeholder">
                 <i class="bi bi-plus-lg"></i>
             </div>
             <span>Criar Nova</span>
         </div>
 
-        @for (cat of service.categories(); track cat.id){
-
+        @for (cat of state.categories(); track cat.id){
 
             <div class="category-card">
                 <i class="bi bi-tags icon-circle"></i>
@@ -31,11 +30,57 @@
                 </div>
                     
                 <div class="u-row card-actions">
-                    <i class="bi bi-pencil edit btn-icon"></i>
-                    <i class="bi bi-trash3-fill delete btn-icon"></i>
+                    <i (click)="onEditCategory(cat)" class="bi bi-pencil edit btn-icon"></i>
+                    <i (click)="onDeleteCategory(cat)" class="bi bi-trash3-fill delete btn-icon"></i>
                 </div>
             </div>
         }
 
     </div>
 </div>
+
+@if (isNewCategoryModalOpen()) {
+    <app-modal title="Adicionar Categoria" (closeRequest)="onCloseModal()">
+        <div class="body">
+            <label class="form-label" for="new-name">Escolha um Nome </label>
+            <input [formControl]="nameControl" class="form-input" id="new-name" type="text" placeholder="Digite aqui...">
+            <div class="warning-message">{{invalidMessage()}}</div>
+        </div>
+
+        <div class="modal-btn-container">
+            <button (click)="onConfirmNewCategory()" class="modal-btn confirm">Confirmar</button>
+            <button (click)="onCloseModal()" class="modal-btn cancel">Cancelar</button>
+        </div>
+    </app-modal>
+}
+
+@if (isEditCategoryModalOpen()) {
+    <app-modal title="Editar Categoria" (closeRequest)="onCloseModal()">
+        <div class="body">
+            <label class="form-label" for="new-name">Novo nome</label>
+            <input [formControl]="nameControl" class="form-input" id="new-name" type="text" placeholder="Digite aqui...">
+            <div class="warning-message">{{invalidMessage()}}</div>
+        </div>
+        
+        <div class="modal-btn-container">
+            <button (click)="onConfirmUpdateCategory()" class="modal-btn confirm">Confirmar</button>
+            <button (click)="onCloseModal()" class="modal-btn cancel">Cancelar</button>
+        </div>
+    </app-modal>
+}
+
+@if (isDeleteCategoryModalOpen()) {
+    <app-modal  title="Deletar Categoria" (closeRequest)="onCloseModal()">    
+        
+        <div class="delete-container">
+            <h3>Tem certeza que deseja deletar a categoria <span>{{currentCategory()?.name}}</span>?</h3>
+            <p>Todas as Transações ligadas à ela seram removidas também!</p>
+            <p>Essa ação é irreversível!</p>
+        </div>
+
+        <div class="modal-btn-container">
+            <button (click)="onConfirmDeleteCategory()" class="modal-btn confirm">Confirmar</button>
+            <button (click)="onCloseModal()" class="modal-btn cancel">Cancelar</button>
+        </div>
+    </app-modal>
+}

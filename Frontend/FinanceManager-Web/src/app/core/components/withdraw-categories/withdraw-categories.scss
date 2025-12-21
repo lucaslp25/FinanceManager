@@ -97,6 +97,9 @@
     box-shadow: none;
     cursor: pointer;
     color: var(--color-text-soft);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     &:hover{
         background-color: var(--color-brand-primary);
@@ -107,7 +110,6 @@
             background-color: var(--color-brand-primary);
             color: white;
         }
-
     }
 
     .icon-placeholder{
@@ -121,4 +123,63 @@
         font-size: 1.5rem;
         transition: 0.3s;
     }
+}
+
+//modal
+
+.modal-btn-container{
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+
+    .modal-btn{
+        color: var(--color-bg);
+        padding: var(--spacing-sm);
+        border-radius: var(--spacing-sm);
+        border: none;
+        background-color: var(--color-text-normal);
+        font-size: var(--font-size-md);
+        font-family: 'Inter';
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+        
+        &:hover{
+            transform: scale(1.01);
+            cursor: pointer;
+        }
+
+        &.confirm{
+            background-color: var(--color-success);
+        }
+
+        &.cancel{
+            background-color: var(--color-loss);
+        }
+    }
+}
+
+.body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: var(--spacing-sm);
+}
+
+.delete-container{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+
+    span{
+        color: var(--color-brand-primary);
+    }
+}
+
+.warning-message{
+    color: var(--color-loss)
 }
