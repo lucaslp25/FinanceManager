@@ -1,6 +1,6 @@
 services:
 
-  # Database
+  # Database -- PROD profile
   finance-db:
     image: postgres:15-alpine
     container_name: finance_db_prod
@@ -21,7 +21,24 @@ services:
       timeout: 5s
       retries: 5
 
-  # Back-end
+  # Database -- DEV profile
+  finance-db-dev:
+    image: postgres:15-alpine
+    # container name is the host name of pgadmin
+    container_name: finance_db_dev 
+    restart: always
+    environment:
+      POSTGRES_DB: finance_db_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5434:5432" # external port 5434
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data # separate volume  
+    networks:
+      - finance-net
+
+  # Back-end -- PROD profile 
   finance_manager-api:
     build:
       context: ./Backend/FinanceManager-API
@@ -32,6 +49,8 @@ services:
       - "8080:8080"
     env_file:
       - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
     depends_on:
       finance-db:
         condition: service_healthy # starts only when the database is ok
@@ -67,9 +86,9 @@ services:
       - finance_manager-api
 
 
-
 volumes:
   postgres_data:
+  postgres_data_dev:
 
 networks:
   finance-net:

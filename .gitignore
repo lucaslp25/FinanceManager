@@ -1,5 +1,4 @@
 # --- Dados e Backups ---
-*.sql
 *.dump
 postgres_data/
 docker-volumes/

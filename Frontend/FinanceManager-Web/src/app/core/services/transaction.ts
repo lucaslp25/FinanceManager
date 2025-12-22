@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { BalanceDTO } from '../models/wallet';
 import { catchError, Observable, throwError } from 'rxjs';
 import { TransactionResponseDTO, WithdrawDTO, WithdrawTransactionResponseDTO } from '../models/transaction';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class Transaction {
 
   private http = inject(HttpClient);
 
-  private UrlBase = 'http://localhost:8080/api/transaction';
+  private UrlBase = `${environment.apiUrl}/transaction`;
 
   public depositBalance(dto: BalanceDTO):Observable<TransactionResponseDTO>{
     return this.http.post<TransactionResponseDTO>(`${this.UrlBase}/deposit`, dto)

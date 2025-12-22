@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LoginDTO, LoginResponseDTO, RegisterDTO, RegisterResponseDTO } from '../models/auth';
 import { catchError, Observable, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,8 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
-  private baseURL = 'http://localhost:8080/api/auth';
+
+  private baseURL = `${environment.apiUrl}/auth`;
 
   login(credentials: LoginDTO): Observable<LoginResponseDTO>{
     return this.http.post<LoginResponseDTO>(`${this.baseURL}/login`, credentials)

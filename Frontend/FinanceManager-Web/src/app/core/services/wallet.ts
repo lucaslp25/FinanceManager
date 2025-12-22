@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { BalanceDTO, WalletResponseDTO } from '../models/wallet';
 import { Observable } from 'rxjs';
 import { WithdrawCategory } from './withdraw-category';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -11,9 +12,9 @@ export class Wallet {
 
   private http = inject(HttpClient);
 
-  private baseURL = 'http://localhost:8080/api/wallet';
+  private UrlBase = `${environment.apiUrl}/wallet`;
 
   public getWallet(): Observable<WalletResponseDTO>{
-    return this.http.get<WalletResponseDTO>(`${this.baseURL}/my-wallet`);
+    return this.http.get<WalletResponseDTO>(`${this.UrlBase}/my-wallet`);
   }
 }

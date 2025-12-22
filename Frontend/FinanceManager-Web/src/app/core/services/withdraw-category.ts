@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 export interface WithdrawCategoryResponseDTO {
   id: number;
@@ -17,11 +18,11 @@ export interface WithdrawCategoryDTO {
 export class WithdrawCategory {
 
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/withdrawcategory';
+  private UrlBase = `${environment.apiUrl}/withdrawcategory`;
 
   // load
   public loadWithdrawCategories(): Observable<WithdrawCategoryResponseDTO[]>{
-    return this.http.get<WithdrawCategoryResponseDTO[]>(this.apiUrl)
+    return this.http.get<WithdrawCategoryResponseDTO[]>(this.UrlBase)
     .pipe(catchError(this.handleError));
   };
 
@@ -30,7 +31,7 @@ export class WithdrawCategory {
     const dto = {
       name
     };
-    return this.http.post<WithdrawCategoryResponseDTO>(`${this.apiUrl}/create `, dto)
+    return this.http.post<WithdrawCategoryResponseDTO>(`${this.UrlBase}/create `, dto)
     .pipe(catchError(this.handleError));
   }
 
@@ -38,12 +39,12 @@ export class WithdrawCategory {
     const dto = {
       name
     };
-    return this.http.put<WithdrawCategoryResponseDTO>(`${this.apiUrl}/${id}/update`, dto)
+    return this.http.put<WithdrawCategoryResponseDTO>(`${this.UrlBase}/${id}/update`, dto)
     .pipe(catchError(this.handleError));
   }
 
   public deleteCategory(id: number){
-    return this.http.delete<WithdrawCategoryResponseDTO>(`${this.apiUrl}/${id}/delete`)
+    return this.http.delete<WithdrawCategoryResponseDTO>(`${this.UrlBase}/${id}/delete`)
     .pipe(catchError(this.handleError));
   }
 
