@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # install all dependencies
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # copy the code
 COPY . .
@@ -24,7 +24,6 @@ FROM nginx:alpine
 # remove the default config of nginx
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copia a nossa configuração customizada (vamos criar no passo 2)
 COPY nginx.conf /etc/nginx/conf.d/
 
 # copy the compiled files of prev step for the nginx
