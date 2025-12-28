@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { BalanceDTO } from '../models/wallet';
 import { catchError, Observable, throwError } from 'rxjs';
 import { TransactionResponseDTO, WithdrawDTO, WithdrawTransactionResponseDTO } from '../models/transaction';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

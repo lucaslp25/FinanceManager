@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/transaction")
@@ -36,8 +36,8 @@ public class TransactionController {
     }
 
     @GetMapping(value = "/withdraw-transactions")
-    public ResponseEntity<Set<WithdrawTransactionResponseDTO>> findAllWithdrawTransactions(){
-        Set<WithdrawTransactionResponseDTO> response = transactionService.findAllWithdrawTransactions();
+    public ResponseEntity<List<WithdrawTransactionResponseDTO>> findAllWithdrawTransactions(){
+        List<WithdrawTransactionResponseDTO> response = transactionService.findAllWithdrawTransactions();
         return ResponseEntity.ok().body(response);
     }
 }

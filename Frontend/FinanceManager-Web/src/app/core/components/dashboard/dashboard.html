@@ -1,1 +1,172 @@
-<p>dashboard works!</p>
+<div class="page-container">
+
+  <div class="u-row u-gap-md u-align-center u-margin-bottom-lg">
+    <h2 style="color: var(--color-text-normal)">Finance Manager - Dashboards</h2>
+    <i class="bi bi-clipboard-data-fill u-size-lg"></i>
+  </div>
+
+  <div class="kpi-container">
+
+    <div class="kpi-card">
+      <div>Período</div>
+      <div class="div-line"></div>
+      @if (isAllTime()) {
+
+        <span>{{ periodLabel() }}</span>
+    
+      } @else {
+        <span>{{ periodLabel() | date: 'MM/yyyy' }}</span>
+      }
+
+    </div>
+
+    <div class="kpi-card kpi-green"> <div>Entradas</div>
+      <div class="div-line"></div>
+      <span>{{ kpiData().totalDeposit | currency: 'BRL' }}</span>
+    </div>
+
+    <div class="kpi-card kpi-red">
+      <div>Despesas</div>
+      <div class="div-line"></div>
+      <span>{{ kpiData().totalWithdraw | currency: 'BRL' }}</span>
+    </div>
+
+    <div class="kpi-card kpi-blue">
+      <div>Saldo</div>
+      <div class="div-line"></div>
+      <span [style.color]="kpiData().balance >= 0 ? 'var(--color-brand-secondary)' : 'red'">
+        {{ kpiData().balance | currency: 'BRL' }}
+      </span>
+    </div>
+
+  </div>
+
+  <div class="control-container">
+    <div class="control-content">
+      <div class="toggle-wrapper">
+            <label class="switch">
+              <input type="checkbox" 
+                    [checked]="isAllTime()" 
+                    (change)="isAllTime.set($any($event.target).checked)">
+              <span class="slider round"></span>
+            </label>
+            <span class="toggle-label">Ver Histórico Completo</span>
+      </div>
+
+      <div class="divider"></div>
+
+
+      <label [class.disabled]="isAllTime()" class="form-label">Ano: 
+        <input class="form-input" type="number" [value]="year()" (input)="year.set(+$any($event.target).value)" [disabled]="isAllTime()">
+      </label>
+      
+      <label [class.disabled]="isAllTime()" class="form-label">Mês: 
+        <input class="form-input" type="number" [value]="month()" (input)="month.set(+$any($event.target).value)" [disabled]="isAllTime()">
+      </label>
+    </div>
+  </div>
+    
+
+  <div class="dash-container">
+
+    <div class="dash-content">
+
+      @if (isAllocationLoading()) {
+        <app-loading message="Gráfico carregando..."></app-loading>
+      } @else {
+
+        
+        @if (allocation().length > 0) {
+          <canvas baseChart
+          [data]="chartAllocationData()" 
+          [type]="'doughnut'"
+          [options]="pieChartOptions()">
+        </canvas>
+        
+      } @else {
+        <h4>Nenhum dado encontrado nesse período!</h4>
+      }
+    }
+    </div>
+
+    <div class="dash-content" style="width: 900px">
+
+      @if (isEvolutionLoading()) {
+
+        <app-loading message="Gráfico carregando..."></app-loading>
+
+      } @else{
+        <canvas baseChart
+        [data]="chartEvolutionData()"
+        [type]="'bar'"
+        [options]="barChartOptions()">
+        </canvas>
+      }
+      
+    </div>
+
+
+  </div>
+
+  <div class="top-expenses-container">
+
+    <div class="header-expenses-section">
+      <div class="u-row u-align-center u-gap-lg">
+        <i class="bi bi-list-stars u-size-xl"></i>
+        <h2>Top despesas com maiores gastos!</h2>
+      </div>
+      <div>
+        <label class="form-label">Mostrar: </label>
+
+        <input class="form-input"
+        type="number"
+        placeholder="Padrão: 5"
+        [value]="sizeList() ?? ''"
+        (change)="updateSizeList($any($event.target).value)"
+        min="1"
+        max="50" 
+        style="width: 110px;">
+      </div>
+    </div>
+
+    @if (isExpensesListLoading()) {
+
+      <app-loading message="Carregando lista..."></app-loading>
+
+    } @else {
+
+      
+      @if(topExpenses()){
+
+      
+      <table>
+        <thead>
+          <tr>
+            <th class="th-celula">Nome Categoria</th>
+            <th class="th-celula">Descrição</th>
+            <th class="th-celula">Valor</th>
+            <th class="th-celula">Data</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+        @for (item of topExpenses(); track $index) {
+          <tr>
+            <td class="tb-celula">{{item.categoryName}}</td>
+            <td class="tb-celula">{{item.description}}</td>
+            <td class="tb-celula">{{item.amount | currency: 'BRL'}}</td>
+            <td class="tb-celula">{{item.date | date: 'dd/MM/yyyy'}}</td>
+          </tr>
+        }
+        </tbody>
+      </table>
+
+    } @else {
+      <h2>Não temos nada para mostrar</h2>
+    }
+    
+  }
+  </div>
+  
+</div>

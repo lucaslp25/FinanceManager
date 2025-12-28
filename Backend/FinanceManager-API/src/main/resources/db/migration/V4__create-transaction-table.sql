@@ -4,8 +4,8 @@ CREATE TABLE tb_transaction(
     description VARCHAR(150) NULL,
     transaction_type VARCHAR(15) NOT NULL,
     date TIMESTAMP NOT NULL,
-    withdraw_category_id BIGINT NULL,
-    user_id BIGINT NOT NULL,
+    withdraw_category_id INT NULL,
+    user_id INT NOT NULL,
 
    CONSTRAINT fk_withdraw_category FOREIGN KEY (withdraw_category_id) REFERENCES tb_withdraw_category(id),
    CONSTRAINT fk_transaction_user_id FOREIGN KEY (user_id) REFERENCES tb_user(id)

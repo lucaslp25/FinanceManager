@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,10 +96,10 @@ public class TransactionService {
     }
 
     @Transactional(readOnly = true)
-    public Set<WithdrawTransactionResponseDTO> findAllWithdrawTransactions(){
+    public List<WithdrawTransactionResponseDTO> findAllWithdrawTransactions(){
         User user = userService.findUserByAuth();
-        Set<Transaction> transactions = transactionRepository.myAllExpensesTransactions(user.getId());
-        return transactions.stream().map(WithdrawTransactionResponseDTO::new).collect(Collectors.toSet());
+        List<Transaction> transactions = transactionRepository.myAllExpensesTransactions(user.getId());
+        return transactions.stream().map(WithdrawTransactionResponseDTO::new).collect(Collectors.toList());
     }
 
 }

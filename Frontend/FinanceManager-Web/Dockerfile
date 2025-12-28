@@ -13,8 +13,11 @@ RUN npm ci
 # copy the code
 COPY . .
 
+RUN echo "export const environment = { production: true, apiUrl: 'http://localhost:8080/api' };" > src/environments/environment.ts
+RUN echo "export const environment = { production: true, apiUrl: 'http://localhost:8080/api' };" > src/environments/environment.development.ts
+
 # compile for production (generate the dist/)
-RUN npm run build -- --configuration production
+RUN npm run build
 
 FROM nginx:alpine
 
