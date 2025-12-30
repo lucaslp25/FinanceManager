@@ -80,6 +80,14 @@
                             <span>Nova</span>
                         </button>
                     </div>   
+
+                    <div class="input-wrapper" style="margin-bottom: 1rem; flex-direction: row; align-items: center;">
+                        <label class="form-label">Data e Hora</label>
+                        <input 
+                            class="form-input" 
+                            type="datetime-local" 
+                            formControlName="date">
+                    </div>
                     
                     <div class="input-description">
                         <label class="form-label">Descrição</label>
@@ -110,6 +118,10 @@
             [formControl]="newCategoryControl" 
             placeholder="Ex: Investimentos, Contas..."
             (keyup.enter)="saveNewCategory()"> 
+        </div>
+
+        <div class="error-message">
+            {{errorMessage()}}
         </div>
         
         <div class="modal-footer">

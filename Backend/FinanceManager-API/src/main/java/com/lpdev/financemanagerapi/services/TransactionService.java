@@ -87,6 +87,7 @@ public class TransactionService {
         transaction.setWithdrawCategory(withdrawCategory);
         transaction.setDescription(description);
         transaction.setUser(user);
+        transaction.setDate(dto.date());
 
         Wallet wallet = walletService.updateBalance(dto.amount(), TransactionType.WITHDRAW);
 

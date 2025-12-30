@@ -25,7 +25,7 @@ export class WithdrawCategories implements OnInit{
 
   public nameControl = new FormControl('', {
     nonNullable: true,
-    validators: [Validators.required, Validators.minLength(3)]
+    validators: [Validators.required, Validators.minLength(3), Validators.maxLength(30)]
   });
 
   onNewCategory():void{
@@ -69,7 +69,7 @@ export class WithdrawCategories implements OnInit{
   onConfirmNewCategory(): void{
 
     if(this.nameControl.invalid){
-      this.invalidMessage.set('Nome inválido! Mínimo 3 Caracteres.');
+      this.invalidMessage.set(' Nome inválido! Precisa ter entre 3 e 30 caracteres.');
       return; 
     }
     const name = this.nameControl.value;

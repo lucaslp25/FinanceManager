@@ -43,7 +43,9 @@ public class Transaction implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.date = Instant.now();
+        if (date == null) {
+            this.date = Instant.now();
+        }
     }
 }
 

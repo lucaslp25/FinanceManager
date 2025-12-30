@@ -25,8 +25,10 @@ export class Wallet implements OnInit {
 
   public modalMode = signal<ModalMode>(null);
 
+  public errorMessage = signal<string | null>(null);
+
   public isCategoryModalOpen = signal(false);
-  newCategoryControl = new FormControl('', [Validators.required]);
+  newCategoryControl = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
 
   openNewCategoryModal(){
     this.newCategoryControl.reset();
@@ -35,10 +37,17 @@ export class Wallet implements OnInit {
 
   closeNewCategoryModal(){
     this.isCategoryModalOpen.set(false);
+    this.errorMessage.set(null);
   }
 
   saveNewCategory(){
-    if(this.newCategoryControl.invalid) return;
+
+    if(this.newCategoryControl.invalid){
+      this.errorMessage.set('Nome inválido! Precisa ter entre 3 e 30 caracteres.');
+      return;
+    } 
+
+    console.log(this.errorMessage());
 
     const name = this.newCategoryControl.value || '';
 
@@ -55,10 +64,17 @@ export class Wallet implements OnInit {
   amountControl = new FormControl<string | number>('', [Validators.required]);
 
   withdrawForm: FormGroup = this.fb.group({
-    amount: ['', [Validators.required]],
-    category: ['', [Validators.required]],
-    description: ['']
+    amount: new FormControl('', [Validators.required]),
+    category: new FormControl('', [Validators.required]),
+    description: new FormControl(''),
+    date: new FormControl(this.getCurrentDateTimeForInput(), [Validators.required])
   });
+
+  private getCurrentDateTimeForInput(): string {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset())
+    return now.toISOString().slice(0, 16);
+  }
 
   openAddSaldoModal(){
     this.amountControl.reset();
@@ -86,10 +102,11 @@ export class Wallet implements OnInit {
     const dto = {
       amount: this.withdrawForm.value.amount,
       categoryId: this.withdrawForm.value.category,
-      description: this.withdrawForm.value.description
+      description: this.withdrawForm.value.description,
+      date: new Date(this.withdrawForm.value.date as string).toISOString()
     };
 
-    console.log(`DADOS DO MEU DTO: ${dto.amount}, ${dto.categoryId}, ${dto.description}`)
+    console.log(`DADOS DO MEU DTO: ${dto.amount}, ${dto.categoryId}, ${dto.description}, ${dto.date}`)
 
     this.state.withdrawBalance(dto).subscribe({
 

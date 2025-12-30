@@ -163,3 +163,15 @@
         background-color: var(--color-loss);
     }
 }
+
+input[type="datetime-local"] {
+    font-family: inherit; 
+    color: var(--color-text-soft); 
+    cursor: pointer;
+}
+
+.error-message{
+    color: var(--color-loss);
+    font-family: 'Roboto';
+    font-size: var(--font-size-lg);
+}
