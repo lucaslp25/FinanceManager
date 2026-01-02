@@ -105,7 +105,21 @@ public class TransactionService {
     @Transactional
     public WithdrawTransactionResponseDTO editTransaction(String id, WithdrawTransactionEditDTO dto){
         Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() -> new FinanceManagerNotFoundException("Cannot find transaction with id: " + id));
+
+        BigDecimal oldBalance = transaction.getAmount();
         copyEditData(dto, transaction);
+        BigDecimal newBalance = transaction.getAmount();
+
+        if (oldBalance.compareTo(newBalance) != 0){
+
+            if(newBalance.compareTo(oldBalance) > 0){
+                BigDecimal diff = newBalance.subtract(oldBalance);
+                this.walletService.updateBalance(diff, TransactionType.WITHDRAW);
+            }else{
+                BigDecimal diff = oldBalance.subtract(newBalance);
+                this.walletService.updateBalance(diff, TransactionType.DEPOSIT);
+            }
+        }
         return new WithdrawTransactionResponseDTO(transaction);
     }
 

@@ -1,6 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Transaction } from '../services/transaction';
-import { WithdrawTransactionEditDTO, WithdrawTransactionResponseDTO } from '../models/transaction';
+import { TransactionResponseDTO, WithdrawDTO, WithdrawTransactionEditDTO, WithdrawTransactionResponseDTO } from '../models/transaction';
+import { BalanceDTO } from '../models/wallet';
+import { catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +51,39 @@ export class TransactionState {
       })
     }
   }
+
+  public addBalance(dto: BalanceDTO){
+      return this.service.depositBalance(dto).pipe(
+        tap((data: TransactionResponseDTO) => {
+          const dto = {
+            balance: data.newBalance,
+            userId: data.userId
+          };
+          console.log("State: updating wallet data.. ", data);
+          // this._wallet.set(dto);
+        }),
+          catchError(err =>{
+          console.error("State: error on add balance request.. ", err);
+          return throwError(() => err);
+         })
+      )
+    }  
+  
+    public withdrawBalance(dto: WithdrawDTO){
+      return this.service.withdrawBalance(dto).pipe(
+        tap((data: TransactionResponseDTO) =>{
+          const dto = {
+            balance: data.newBalance,
+            userId: data.userId
+          };
+          console.log("State: updating wallet data.. ", data);
+          // this._wallet.set(dto);
+        }),
+        catchError(err =>{
+          console.error("State: error on withdraw balance request.. ", err);
+          return throwError(() => err);
+         })
+      )
+    }
   
 }
