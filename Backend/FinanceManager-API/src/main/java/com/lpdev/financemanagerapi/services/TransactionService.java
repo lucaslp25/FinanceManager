@@ -1,10 +1,8 @@
 package com.lpdev.financemanagerapi.services;
 
-import com.lpdev.financemanagerapi.DTO.BalanceDTO;
-import com.lpdev.financemanagerapi.DTO.TransactionResponseDTO;
-import com.lpdev.financemanagerapi.DTO.WithdrawDTO;
-import com.lpdev.financemanagerapi.DTO.WithdrawTransactionResponseDTO;
+import com.lpdev.financemanagerapi.DTO.*;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerBadRequestException;
+import com.lpdev.financemanagerapi.exceptions.FinanceManagerNotFoundException;
 import com.lpdev.financemanagerapi.model.entities.Transaction;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.model.entities.WithdrawCategory;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,4 +102,38 @@ public class TransactionService {
         return transactions.stream().map(WithdrawTransactionResponseDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public WithdrawTransactionResponseDTO editTransaction(String id, WithdrawTransactionEditDTO dto){
+        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() -> new FinanceManagerNotFoundException("Cannot find transaction with id: " + id));
+        copyEditData(dto, transaction);
+        return new WithdrawTransactionResponseDTO(transaction);
+    }
+
+    @Transactional
+    public void deleteTransaction(String id){
+
+        if(!transactionRepository.existsById(id)){
+            throw new FinanceManagerNotFoundException("Cannot find transaction with id: " + id);
+        }
+        this.transactionRepository.deleteById(id);
+    }
+
+    @Transactional
+    protected Transaction copyEditData(WithdrawTransactionEditDTO dto, Transaction transaction){
+        // cleaning data
+        BigDecimal amount = dto.amount() != null ? dto.amount() : transaction.getAmount();
+        String description = dto.description() != null ? dto.description() : transaction.getDescription();
+        Instant date = dto.date() != null ? dto.date() : transaction.getDate();
+
+        WithdrawCategory category = dto.categoryId() != null ? withdrawCategoryService.findById(dto.categoryId()) : transaction.getWithdrawCategory();
+
+        transaction.setDescription(description);
+        transaction.setAmount(amount);
+        transaction.setDate(date);
+        transaction.setWithdrawCategory(category);
+
+        return transaction;
+    }
+
 }
+

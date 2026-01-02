@@ -9,10 +9,11 @@ public record WithdrawTransactionResponseDTO(
         String transactionId,
         Instant date,
         BigDecimal amount,
-        String category,
-        String description
+        String categoryName,
+        String description,
+        Long categoryId
 ) {
     public WithdrawTransactionResponseDTO(Transaction entity){
-        this(entity.getId(), entity.getDate(), entity.getAmount(), entity.getWithdrawCategory().getName(), entity.getDescription());
+        this(entity.getId(), entity.getDate(), entity.getAmount(), entity.getWithdrawCategory().getName(), entity.getDescription(), entity.getWithdrawCategory().getId());
     }
 }

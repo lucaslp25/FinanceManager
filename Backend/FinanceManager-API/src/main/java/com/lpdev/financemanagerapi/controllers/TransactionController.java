@@ -1,9 +1,6 @@
 package com.lpdev.financemanagerapi.controllers;
 
-import com.lpdev.financemanagerapi.DTO.BalanceDTO;
-import com.lpdev.financemanagerapi.DTO.TransactionResponseDTO;
-import com.lpdev.financemanagerapi.DTO.WithdrawDTO;
-import com.lpdev.financemanagerapi.DTO.WithdrawTransactionResponseDTO;
+import com.lpdev.financemanagerapi.DTO.*;
 import com.lpdev.financemanagerapi.services.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +36,17 @@ public class TransactionController {
     public ResponseEntity<List<WithdrawTransactionResponseDTO>> findAllWithdrawTransactions(){
         List<WithdrawTransactionResponseDTO> response = transactionService.findAllWithdrawTransactions();
         return ResponseEntity.ok().body(response);
+    }
+
+    @PatchMapping(value = "/{id}/edit")
+    public ResponseEntity<WithdrawTransactionResponseDTO> editWithdrawTransaction(@PathVariable String id, @RequestBody WithdrawTransactionEditDTO dto){
+        WithdrawTransactionResponseDTO response = transactionService.editTransaction(id, dto);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping(value = "/{id}/delete")
+    public ResponseEntity<Void> deleteWithdrawTransaction(@PathVariable String id){
+        transactionService.deleteTransaction(id);
+        return ResponseEntity.noContent().build();
     }
 }

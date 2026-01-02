@@ -17,6 +17,14 @@ export interface WithdrawTransactionResponseDTO{
     transactionId: string;
     date: Date;
     amount: number;
-    category: string;
+    categoryId: number;
+    categoryName: string;
     description: string;
+}
+
+export interface WithdrawTransactionEditDTO{
+    amount: number | null;
+    description: string | null;
+    categoryId: number | null;
+    date: Date | string | null;
 }

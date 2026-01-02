@@ -25,10 +25,11 @@
                         <tr class="tr-row">
                             <td class="tb-celula">{{item.date|date:'dd/MM/yyyy HH:mm:ss'}}</td>
                             <td class="tb-celula amount-loss">- {{item.amount|currency:'BRL'}}</td>
-                            <td class="tb-celula">{{item.category}}</td>
+                            <td class="tb-celula">{{item.categoryName}}</td>
                             <td class="tb-celula description">{{item.description}}</td>
+                            <td (click)="onEdit(item)" class="tb-celula"><i class="bi bi-pencil-fill icon-edit edit"></i></td>
+                            <td (click)="onExclude(item)" class="tb-celula"><i class="bi bi-trash icon-edit remove"></i></td>
                         </tr>
-                        
                     }
 
                 </tbody>
@@ -51,3 +52,71 @@
 
 
 </div>
+
+@if (isEditModalOpen()) {
+
+    <app-modal (closeRequest)="isEditModalOpen.set(false)" title="Editar Despesa">
+        
+        <form [formGroup]="editForm" class="edit-form-container">
+            
+            <div class="input-wrapper">
+                <label class="form-label">Valor</label>
+                <input type="number" 
+                       class="form-input" 
+                       formControlName="amount" 
+                       placeholder="0.00">
+            </div>
+
+            <div class="input-wrapper">
+                <label class="form-label">Descrição</label>
+                <input type="text" 
+                       class="form-input" 
+                       formControlName="description">
+            </div>
+
+            <div class="input-wrapper">
+                <label class="form-label">Categoria</label>
+
+                <select class="form-input" formControlName="categoryId">
+                    <option [ngValue]="null" disabled selected>Selecione uma categoria</option>
+                    @for (cat of categoryState.categories(); track cat.id) {
+                        <option [value]="cat.id">{{cat.name}}</option>
+                    }
+                </select>
+            </div>
+
+
+            <div class="input-wrapper">
+                <label class="form-label">Data e Hora</label>
+                <input type="datetime-local" 
+                       class="form-input" 
+                       formControlName="date">
+            </div>
+
+            <div class="modal-footer">
+                <button (click)="onConfirmEdit()" class="modal-btn confirm">Salvar</button>
+                <button (click)="isEditModalOpen.set(false)" class="modal-btn cancel">Cancelar</button>
+            </div>
+
+        </form>
+
+    </app-modal>
+
+}
+@if (isExcludeModalOpen()) {
+
+    <app-modal (closeRequest)="isExcludeModalOpen.set(false)" title="Excluir Despesa">
+
+          <div class="delete-container">
+            <h3>Tem certeza que deseja deletar a despesa
+                 <span>{{currentTransaction()?.description}}</span> com valor de
+                 <span>{{currentTransaction()?.amount | currency: 'BRL'}}?</span></h3>
+            <p>Essa ação é irreversível!</p>
+        </div>
+
+        <div class="modal-footer">
+            <button (click)="onConfirmDelete()" class="modal-btn confirm">Confirmar</button>
+            <button (click)="isExcludeModalOpen.set(false)" class="modal-btn cancel">Cancelar</button>
+        </div>
+    </app-modal>
+}
