@@ -55,12 +55,7 @@ export class TransactionState {
   public addBalance(dto: BalanceDTO){
       return this.service.depositBalance(dto).pipe(
         tap((data: TransactionResponseDTO) => {
-          const dto = {
-            balance: data.newBalance,
-            userId: data.userId
-          };
           console.log("State: updating wallet data.. ", data);
-          // this._wallet.set(dto);
         }),
           catchError(err =>{
           console.error("State: error on add balance request.. ", err);
@@ -72,12 +67,7 @@ export class TransactionState {
     public withdrawBalance(dto: WithdrawDTO){
       return this.service.withdrawBalance(dto).pipe(
         tap((data: TransactionResponseDTO) =>{
-          const dto = {
-            balance: data.newBalance,
-            userId: data.userId
-          };
           console.log("State: updating wallet data.. ", data);
-          // this._wallet.set(dto);
         }),
         catchError(err =>{
           console.error("State: error on withdraw balance request.. ", err);

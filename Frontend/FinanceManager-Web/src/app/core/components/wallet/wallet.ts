@@ -108,13 +108,7 @@ export class Wallet implements OnInit {
 
     console.log(`DADOS DO MEU DTO: ${dto.amount}, ${dto.categoryId}, ${dto.description}, ${dto.date}`)
 
-    this.state.withdrawBalance(dto).subscribe({
-
-      next: (next) =>{
-        console.log(`send the ${dto} for backend...`);
-      },
-      error: (err) => {console.error('Error in request of add balance. ', err)}
-    });    
+    this.state.withdrawBalance(dto);
     
     this.closeModal();
   }
