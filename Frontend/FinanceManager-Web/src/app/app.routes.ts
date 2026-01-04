@@ -8,6 +8,7 @@ import { Wallet } from './core/components/wallet/wallet';
 import { MyExpenses } from './core/components/my-expenses/my-expenses';
 import { WithdrawCategories } from './core/components/withdraw-categories/withdraw-categories';
 import { Dashboard } from './core/components/dashboard/dashboard';
+import { Goal } from './core/components/goal/goal';
 
 export const routes: Routes = [
     // login is the default route 
@@ -24,7 +25,8 @@ export const routes: Routes = [
 
             {path: 'my-expenses', component: MyExpenses, title: 'Meus Gastos'},
             {path: 'my-categories', component: WithdrawCategories, title: 'Minhas Categorias'},
-            {path: 'dashboard', component: Dashboard, title: 'Dashboard'}
+            {path: 'dashboard', component: Dashboard, title: 'Dashboard'},
+            {path: 'my-goals', component: Goal, title: 'Minhas Metas'}
         ]
     },
     

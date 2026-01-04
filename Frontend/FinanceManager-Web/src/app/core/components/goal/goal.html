@@ -1,0 +1,177 @@
+<div class="page-container">
+
+    <div class="header-section">
+        <div class="u-col">
+            <h3>Minhas metas cadastradas</h3>
+            <span>Planeje seus gastos definindo metas!</span>
+        </div>
+        <div (click)="onNewGoal()" class="form-btn">
+            <i class="bi bi-plus"></i>
+            Nova Meta 
+        </div>
+    </div>
+
+    <div class="goals-grid">
+
+        <div (click)="onNewGoal()" class="goal-card add-card">
+            <div class="icon-placeholder">
+                <i class="bi bi-plus-lg"></i>
+            </div>
+            <span>Criar Nova</span>
+        </div>
+
+        @for (item of state.goals(); track item.id) {
+           
+            <div class="goal-card">
+                <i class="bi bi-bullseye icon-circle"></i>
+
+                <div class="card-content">
+                    <span class="title">{{item.name}}</span>
+                    <span><span class="extra-content">Descrição: </span><span style="font-style: italic;"> {{item.description}}</span></span>
+                    <span><span class="extra-content">Valor: </span> {{item.targetAmount | currency: 'BRL'}}</span>
+                    <span><span class="extra-content">Prazo: </span> {{item.deadline | date: 'dd/MM/yyyy'}}</span>
+                    <span><span class="extra-content">Inicio: </span> {{item.initDate | date: 'dd/MM/yyyy'}}</span>
+                </div>
+                    
+                <div class="u-row card-actions">
+                    <i (click)="onEditGoal(item)" class="bi bi-pencil edit btn-icon"></i>
+                    <i (click)="onDeleteGoal(item)" class="bi bi-trash3-fill delete btn-icon"></i>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@if (isNewGoalModalOpen()){
+
+    <app-modal title="Nova Meta" (closeRequest)="onCloseNewGoalModal()">
+        <form [formGroup]="goalForm" class="goal-form">
+            
+            <div class="input-wrapper">
+                <label class="form-label">Nome da Meta <span style="color: var(--color-warning);">*</span></label>
+                <input type="text" 
+                       class="form-input" 
+                       formControlName="name" 
+                       placeholder="Ex: Viagem, Carro Novo, Reserva...">
+            </div>
+
+            <div class="input-wrapper">
+                <label class="form-label">Valor Alvo (R$) <span style="color: var(--color-warning);">*</span></label>
+                <input type="text" 
+                       class="form-input money-input" 
+                       formControlName="targetAmount" 
+                       placeholder="R$ 0,00"
+                       mask="separator.2"
+                       thousandSeparator="."
+                       decimalSeparator=","
+                       prefix="R$ "
+                       dropSpecialCharacters="true">
+                </div>
+
+            <div class="input-wrapper">
+                <label class="form-label">Data Limite (Opcional)</label>
+                <input type="date" 
+                       class="form-input" 
+                       formControlName="deadline">
+            </div>
+
+            <div class="input-wrapper" style="display: flex; align-items: center;">
+                <label class="form-label">Descrição </label>
+                <textarea class="form-input" 
+                          rows="3"
+                          formControlName="description" 
+                          placeholder="Detalhes sobre seu objetivo..."></textarea>
+            </div>
+
+        </form>
+
+       <div class="modal-footer">
+            <button class="modal-btn confirm" 
+                    [disabled]="goalForm.invalid" 
+                    [class.disabled-btn]="goalForm.invalid"
+                    (click)="onConfirmGoal()">
+                Confirmar
+            </button>
+            
+            <button (click)="onCloseNewGoalModal()" class="modal-btn cancel">Cancelar</button>
+        </div>
+
+    </app-modal>
+
+}
+@if (isEditGoalModalOpen()){
+
+    <app-modal title="Editar sua Meta" (closeRequest)="onCloseNewGoalModal()">
+        <form [formGroup]="goalForm" class="goal-form">
+            
+            <div class="input-wrapper">
+                <label class="form-label">Nome: </label>
+                <input type="text" 
+                       class="form-input" 
+                       formControlName="name" 
+                       placeholder="Ex: Viagem, Carro Novo, Reserva...">
+            </div>
+
+            <div class="input-wrapper">
+                <label class="form-label">Valor: </label>
+                <input type="text" 
+                       class="form-input money-input" 
+                       formControlName="targetAmount" 
+                       placeholder="R$ 0,00"
+                       mask="separator.2"
+                       thousandSeparator="."
+                       decimalSeparator=","
+                       prefix="R$ "
+                       dropSpecialCharacters="true">
+                </div>
+
+            <div class="input-wrapper">
+                <label class="form-label">Data: </label>
+                <input type="date" 
+                       class="form-input" 
+                       formControlName="deadline">
+            </div>
+
+            <div class="input-wrapper" style="display: flex; align-items: center;">
+                <label class="form-label">Descrição </label>
+                <textarea class="form-input" 
+                          rows="3"
+                          formControlName="description" 
+                          placeholder="Detalhes sobre seu objetivo..."></textarea>
+            </div>
+
+        </form>
+
+       <div class="modal-footer">
+            <button class="modal-btn confirm" 
+                    [disabled]="goalForm.invalid" 
+                    [class.disabled-btn]="goalForm.invalid"
+                    (click)="onConfirmUpdate()">
+                Confirmar
+            </button>
+            
+            <button (click)="onCloseNewGoalModal()" class="modal-btn cancel">Cancelar</button>
+        </div>
+
+    </app-modal>
+}
+
+@if (isDeleteGoalModalOpen()) {
+    <app-modal title="Deletar Meta" (closeRequest)="onCloseNewGoalModal()">
+
+        <div class="delete-container">
+            <h3>Tem certeza que deseja deletar a meta <span>{{currentGoal()?.name}}</span>?</h3>
+            <p>Essa ação é irreversível!</p>
+        </div>
+
+           <div class="modal-footer">
+            <button class="modal-btn confirm" 
+                    (click)="onConfirmDelete()">
+                Confirmar
+            </button>
+            
+            <button (click)="onCloseNewGoalModal()" class="modal-btn cancel">Cancelar</button>
+        </div>
+    </app-modal>
+}

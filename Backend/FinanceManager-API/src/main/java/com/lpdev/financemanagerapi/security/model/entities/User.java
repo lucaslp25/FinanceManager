@@ -1,5 +1,6 @@
 package com.lpdev.financemanagerapi.security.model.entities;
 
+import com.lpdev.financemanagerapi.model.entities.Goal;
 import com.lpdev.financemanagerapi.model.entities.Transaction;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.security.model.enums.UserRole;
@@ -14,10 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -64,6 +62,9 @@ public class User implements Serializable, UserDetails {
     // cascade ALL -- if exclude the user, exclude your all transactions.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Transaction> transactions = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Goal> goals = new ArrayList<>();
 
     @Builder
     public User(String username, String email, String password, String firstName, String lastName){

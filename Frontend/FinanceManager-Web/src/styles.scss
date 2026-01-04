@@ -274,3 +274,28 @@ html, body {
   color: var(--color-text-normal);
   vertical-align: middle;
 }
+
+.modal-btn{
+    color: var(--color-bg);
+    padding: var(--spacing-sm);
+    border-radius: var(--spacing-sm);
+    border: none;
+    background-color: var(--color-text-normal);
+    font-size: var(--font-size-md);
+    font-family: 'Inter';
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+
+    &:hover{
+        transform: scale(1.01);
+        cursor: pointer;
+    }
+
+    &:first-child{
+        background-color: var(--color-success);
+    }
+
+    &:last-child{
+        background-color: var(--color-loss);
+    }
+}
