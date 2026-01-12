@@ -38,11 +38,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
         ORDER BY t.date DESC
         """ )
     List<Transaction> findAllTransactionsByUserId(@Param("user_id") Long user_id);
-
-    @Query(value = """
-    SELECT  t.class, t.amount, t.date FROM Transaction t
-    WHERE t.amount > :amount
-""")
-    Transaction findT(@Param("amount")BigDecimal amount);
-
 }
