@@ -31,27 +31,60 @@
     @if(modalMode()){
         <app-modal [title]="modalMode() == 'ADD' ? 'Adicionar Saldo' : 'Retirar Saldo'" (closeRequest)="closeModal()">
             @if (modalMode() === 'ADD'){    
-                <div class="input-wrapper">
-                    <label class="form-label">Valor para adicionar</label>
-                    <input type="text"
-                    class="money-input"
-                    placeholder="R$ 0,00"
-                    [formControl]="amountControl"
-                    mask="separator.2"
-                    thousandSeparator="."
-                    decimalSeparator=","
-                    prefix="R$"
-                    [dropSpecialCharacters]="true">
-                </div>
 
-                <div class="modal-footer">
-                    <button  (click)="confirmAdd()" class="modal-btn">Confirmar</button>
-                    <button  (click)="closeModal()" class="modal-btn">Cancelar</button>
-                </div>
+                <form [formGroup]="mainForm" class="form-withdraw">
+
+                    <div class="input-withdraw">
+                        <label class="form-label">Valor para depositar</label>
+                        <input type="text"
+                        class="money-input"
+                        placeholder="R$ 0,00"
+                        formControlName="amount"
+                        mask="separator.2"
+                        thousandSeparator="."
+                        decimalSeparator=","
+                        prefix="R$"
+                        [dropSpecialCharacters]="true">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="form-label">Categoria</label>
+                        <select class="form-input" formControlName="category">
+                            <option value="" disabled selected>Selecione...</option>
+                            @for (cat of depositState.categories(); track cat.id) {
+                                <option [value]="cat.id">{{cat.name}}</option>
+                            }
+                        </select>
+
+                        <button (click)="openDepositCategoryModal()" class="u-row u-align-center u-gap-sm geral-btn">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Nova</span>
+                        </button>
+                    </div>   
+
+                    <div class="input-wrapper" style="margin-bottom: 1rem; flex-direction: row; align-items: center;">
+                        <label class="form-label">Data e Hora</label>
+                        <input 
+                            class="form-input" 
+                            type="datetime-local" 
+                            formControlName="date">
+                    </div>
+                    
+                    <div class="input-description">
+                        <label class="form-label">Descrição</label>
+                        <input class="money-input" type="text" placeholder="Descrição (opcional)" formControlName="description">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button  (click)="confirmAdd()" class="modal-btn">Confirmar</button>
+                        <button  (click)="closeModal()" class="modal-btn">Cancelar</button>
+                    </div>
+                </form>
+
             }
             @if (modalMode() === 'WITHDRAW'){
 
-                <form [formGroup]="withdrawForm" class="form-withdraw">
+                <form [formGroup]="mainForm" class="form-withdraw">
 
                     <div class="input-withdraw">
                         <label class="form-label">Valor para retirar</label>
@@ -70,12 +103,12 @@
                         <label class="form-label">Categoria</label>
                         <select class="form-input" formControlName="category">
                             <option value="" disabled selected>Selecione...</option>
-                            @for (cat of categoryState.categories(); track cat.id) {
+                            @for (cat of withdrawState.categories(); track cat.id) {
                                 <option [value]="cat.id">{{cat.name}}</option>
                             }
                         </select>
 
-                        <button (click)="openNewCategoryModal()" class="u-row u-align-center u-gap-sm geral-btn">
+                        <button (click)="openWithdrawCategoryModal()" class="u-row u-align-center u-gap-sm geral-btn">
                             <i class="bi bi-plus-circle"></i>
                             <span>Nova</span>
                         </button>
@@ -105,19 +138,18 @@
         </app-modal>
     }
     
-    
 </div>
 
-@if (isCategoryModalOpen()) {
-    <app-modal title="Nova Categoria" (closeRequest)="isCategoryModalOpen.set(false)" 
-    (confirmRequest)="saveNewCategory()">
+@if (isWithdrawCategoryModalOpen()) {
+    <app-modal title="Nova Categoria" (closeRequest)="isWithdrawCategoryModalOpen.set(false)" 
+    (confirmRequest)="saveNewWithdrawCategory()">
         <div class="input-wrapper">
             <label class="form-label">Nome da Categoria</label>
             <input type="text" 
             class="form-input" 
             [formControl]="newCategoryControl" 
             placeholder="Ex: Investimentos, Contas..."
-            (keyup.enter)="saveNewCategory()"> 
+            (keyup.enter)="saveNewWithdrawCategory()"> 
         </div>
 
         <div class="error-message">
@@ -125,7 +157,30 @@
         </div>
         
         <div class="modal-footer">
-            <button  (click)="saveNewCategory()" class="modal-btn">Confirmar</button>
+            <button  (click)="saveNewWithdrawCategory()" class="modal-btn">Confirmar</button>
+            <button  (click)="closeNewCategoryModal()" class="modal-btn">Cancelar</button>
+        </div>
+    </app-modal>
+}
+
+@if (isDepositCategoryModalOpen()) {
+    <app-modal title="Nova Categoria" (closeRequest)="isDepositCategoryModalOpen.set(false)" 
+    (confirmRequest)="saveNewDepositCategory()">
+        <div class="input-wrapper">
+            <label class="form-label">Nome da Categoria</label>
+            <input type="text" 
+            class="form-input" 
+            [formControl]="newCategoryControl" 
+            placeholder="Ex: Investimentos, Contas..."
+            (keyup.enter)="saveNewDepositCategory()"> 
+        </div>
+
+        <div class="error-message">
+            {{errorMessage()}}
+        </div>
+        
+        <div class="modal-footer">
+            <button  (click)="saveNewDepositCategory()" class="modal-btn">Confirmar</button>
             <button  (click)="closeNewCategoryModal()" class="modal-btn">Cancelar</button>
         </div>
     </app-modal>

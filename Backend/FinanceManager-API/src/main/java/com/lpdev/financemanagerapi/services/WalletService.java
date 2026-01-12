@@ -28,7 +28,7 @@ public class WalletService {
         return new WalletResponseDTO(wallet);
     }
 
-    private Wallet findWallet(){
+    protected Wallet findWallet(){
         User user = userService.findUserByAuth();
         return walletRepository.findWalletByUserEmail(user.getEmail()).orElseThrow(()
                 -> new FinanceManagerNotFoundException("Not found wallet of user with email: " + user.getEmail()));

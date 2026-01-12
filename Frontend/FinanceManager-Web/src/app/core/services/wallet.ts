@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BalanceDTO, WalletResponseDTO } from '../models/wallet';
+import { WalletResponseDTO } from '../models/wallet';
 import { Observable } from 'rxjs';
-import { WithdrawCategory } from './withdraw-category';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

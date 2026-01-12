@@ -9,6 +9,7 @@ import { MyExpenses } from './core/components/my-expenses/my-expenses';
 import { WithdrawCategories } from './core/components/withdraw-categories/withdraw-categories';
 import { Dashboard } from './core/components/dashboard/dashboard';
 import { Goal } from './core/components/goal/goal';
+import { MyExtract } from './core/components/my-extract/my-extract';
 
 export const routes: Routes = [
     // login is the default route 
@@ -26,7 +27,8 @@ export const routes: Routes = [
             {path: 'my-expenses', component: MyExpenses, title: 'Meus Gastos'},
             {path: 'my-categories', component: WithdrawCategories, title: 'Minhas Categorias'},
             {path: 'dashboard', component: Dashboard, title: 'Dashboard'},
-            {path: 'my-goals', component: Goal, title: 'Minhas Metas'}
+            {path: 'my-goals', component: Goal, title: 'Minhas Metas'},
+            {path: 'my-extract', component: MyExtract, title: 'Meus Extratos'},
         ]
     },
     

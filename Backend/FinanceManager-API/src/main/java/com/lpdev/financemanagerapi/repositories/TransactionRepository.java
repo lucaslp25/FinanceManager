@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -19,5 +20,29 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
         ORDER BY t.date DESC
 """)
     List<Transaction> myAllExpensesTransactions(@Param("user_id") Long user_id);
+
+
+    @Query(nativeQuery = true, value = """
+        SELECT t.* FROM tb_transaction t
+        JOIN tb_user u ON t.user_id = u.id
+        WHERE t.transaction_type = 'DEPOSIT'
+        AND u.id = :user_id
+        ORDER BY t.date DESC
+""")
+    List<Transaction> myAllDepositTransactions(@Param("user_id") Long user_id);
+
+    @Query(nativeQuery = true, value = """
+        SELECT t.* FROM tb_transaction t
+        JOIN tb_user u ON t.user_id = u.id
+        WHERE u.id = :user_id
+        ORDER BY t.date DESC
+        """ )
+    List<Transaction> findAllTransactionsByUserId(@Param("user_id") Long user_id);
+
+    @Query(value = """
+    SELECT  t.class, t.amount, t.date FROM Transaction t
+    WHERE t.amount > :amount
+""")
+    Transaction findT(@Param("amount")BigDecimal amount);
 
 }

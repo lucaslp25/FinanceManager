@@ -1,8 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { BalanceDTO, WalletResponseDTO } from '../models/wallet';
+import { WalletResponseDTO } from '../models/wallet';
 import { Wallet } from '../services/wallet';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { TransactionResponseDTO, WithdrawDTO } from '../models/transaction';
+import { BalanceDTO , WithdrawDTO } from '../models/transaction';
 import { TransactionState } from './transaction-state';
 
 @Injectable({
@@ -33,16 +33,23 @@ export class WalletState {
     )
   };
 
-  public addBalance(dto: BalanceDTO): Observable<any>{
-    return this.transactionState.addBalance(dto).pipe(
-    tap((next) =>{
-      const newWalletData = {
-           balance: next.newBalance,
-           userId: next.userId
-         };
-         this._wallet.set(newWalletData);
-    })
-    )
+  public addBalance(dto: BalanceDTO){
+    this.transactionState.addBalance(dto).subscribe({
+      next: (response: any) => {
+        if (response && response.newBalance !== undefined) {
+            this._wallet.update(current => {
+                if (!current) return null;
+                return { ...current, balance: response.newBalance };
+            });
+
+        } else {
+            this.loadMyWallet().subscribe();
+        }
+      },
+      error: (err: any) => {
+        console.error("State: Error in deposit", err);
+      }
+    });
   }  
 
   public withdrawBalance(dto: WithdrawDTO){

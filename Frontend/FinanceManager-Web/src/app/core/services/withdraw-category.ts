@@ -18,7 +18,7 @@ export interface WithdrawCategoryDTO {
 export class WithdrawCategory {
 
   private http = inject(HttpClient);
-  private UrlBase = `${environment.apiUrl}/withdrawcategory`;
+  private UrlBase = `${environment.apiUrl}/withdraw-category`;
 
   // load
   public loadWithdrawCategories(): Observable<WithdrawCategoryResponseDTO[]>{

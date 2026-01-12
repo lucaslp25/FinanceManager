@@ -5,6 +5,7 @@ import { Modal } from '../../../shared/components/modal/modal';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 import { WithdrawCategoryState } from '../../states/withdraw-category-state';
+import { DepositCategoryState } from '../../states/deposit-category-state';
 
 // control the modal state
 type ModalMode = 'ADD' | 'WITHDRAW' | null;
@@ -20,27 +21,36 @@ export class Wallet implements OnInit {
 
   public state = inject(WalletState);
   public withdrawState = inject(WithdrawCategoryState);
+  public depositState = inject(DepositCategoryState);
   public fb = inject(FormBuilder);
-  public categoryState = inject(WithdrawCategoryState);
 
   public modalMode = signal<ModalMode>(null);
 
   public errorMessage = signal<string | null>(null);
 
-  public isCategoryModalOpen = signal(false);
+  public isWithdrawCategoryModalOpen = signal(false);
+  public isDepositCategoryModalOpen = signal(false);
+
+
   newCategoryControl = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
 
-  openNewCategoryModal(){
+  openWithdrawCategoryModal(){
     this.newCategoryControl.reset();
-    this.isCategoryModalOpen.set(true);
+    this.isWithdrawCategoryModalOpen.set(true);
+  };
+
+  openDepositCategoryModal(){
+    this.newCategoryControl.reset();
+    this.isDepositCategoryModalOpen.set(true);
   };
 
   closeNewCategoryModal(){
-    this.isCategoryModalOpen.set(false);
+    this.isWithdrawCategoryModalOpen.set(false);
+    this.isDepositCategoryModalOpen.set(false);
     this.errorMessage.set(null);
   }
 
-  saveNewCategory(){
+  saveNewWithdrawCategory(){
 
     if(this.newCategoryControl.invalid){
       this.errorMessage.set('Nome inválido! Precisa ter entre 3 e 30 caracteres.');
@@ -51,7 +61,24 @@ export class Wallet implements OnInit {
 
     const name = this.newCategoryControl.value || '';
 
-    this.categoryState.create(name).subscribe({
+    this.withdrawState.create(name).subscribe({
+      next: () =>{
+        this.closeNewCategoryModal();
+      }
+    })
+  };
+
+  saveNewDepositCategory(){
+
+    if(this.newCategoryControl.invalid){
+      this.errorMessage.set('Nome inválido! Precisa ter entre 3 e 30 caracteres.');
+      return;
+    } 
+    console.log(this.errorMessage());
+
+    const name = this.newCategoryControl.value || '';
+
+    this.depositState.create(name).subscribe({
       next: () =>{
         this.closeNewCategoryModal();
       }
@@ -61,9 +88,7 @@ export class Wallet implements OnInit {
   // -- FORMS --
 
   // starts with null.
-  amountControl = new FormControl<string | number>('', [Validators.required]);
-
-  withdrawForm: FormGroup = this.fb.group({
+  mainForm: FormGroup = this.fb.group({
     amount: new FormControl('', [Validators.required]),
     category: new FormControl('', [Validators.required]),
     description: new FormControl(''),
@@ -77,33 +102,31 @@ export class Wallet implements OnInit {
   }
 
   openAddSaldoModal(){
-    this.amountControl.reset();
+    this.mainForm.reset();
     this.modalMode.set('ADD');
   };
   
   OpenWithdrawModal(){
-    this.withdrawForm.reset();
+    this.mainForm.reset();
     this.modalMode.set('WITHDRAW');
   };
 
- 
   closeModal(){
     this.modalMode.set(null);
   }
 
   onNewCategory(value: string){
-    this.categoryState.create(value);
+    this.withdrawState.create(value);
   }
 
-
   confirmWithdraw(){
-    if(this.withdrawForm.invalid) return;
+    if(this.mainForm.invalid) return;
 
     const dto = {
-      amount: this.withdrawForm.value.amount,
-      categoryId: this.withdrawForm.value.category,
-      description: this.withdrawForm.value.description,
-      date: new Date(this.withdrawForm.value.date as string).toISOString()
+      amount: this.mainForm.value.amount,
+      categoryId: this.mainForm.value.category,
+      description: this.mainForm.value.description,
+      date: new Date(this.mainForm.value.date as string).toISOString()
     };
 
     console.log(`DADOS DO MEU DTO: ${dto.amount}, ${dto.categoryId}, ${dto.description}, ${dto.date}`)
@@ -114,23 +137,17 @@ export class Wallet implements OnInit {
   }
 
   confirmAdd(){
-    if (this.amountControl.invalid) return;
 
-    const rawValue = this.amountControl.value;
-    const numericValue = Number(rawValue) || 0;
-
-    console.log(`Raw Value for backend: ${rawValue}`);
-    console.log(`Numeric value for backend: ${numericValue}`);
+    if(this.mainForm.invalid) return;
 
     const dto = {
-      amount: numericValue
-    }
-    
-    this.state.addBalance(dto).subscribe({
-      next: (next) => {console.log(`Balance updated --> ${next.newBalance}`)},
-      error: (err) => {console.error('Error in request of add balance. ', err)}
-    })
+      amount: this.mainForm.value.amount,
+      categoryId: this.mainForm.value.category,
+      description: this.mainForm.value.description,
+      date: new Date(this.mainForm.value.date as string).toISOString()
+    };
 
+    this.state.addBalance(dto);
     this.closeModal();
   }
 
@@ -143,6 +160,7 @@ export class Wallet implements OnInit {
     });
 
     this.withdrawState.load();
+    this.depositState.load();
   }
 
 }

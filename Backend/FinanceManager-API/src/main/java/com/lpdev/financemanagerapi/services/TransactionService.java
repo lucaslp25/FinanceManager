@@ -3,6 +3,7 @@ package com.lpdev.financemanagerapi.services;
 import com.lpdev.financemanagerapi.DTO.*;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerBadRequestException;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerNotFoundException;
+import com.lpdev.financemanagerapi.model.entities.DepositCategory;
 import com.lpdev.financemanagerapi.model.entities.Transaction;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.model.entities.WithdrawCategory;
@@ -29,12 +30,21 @@ public class TransactionService {
     private final UserService userService;
     private final WalletService walletService;
     private final WithdrawCategoryService withdrawCategoryService;
+    private final DepositCategoryService depositCategoryService;
 
     @Transactional
     public TransactionResponseDTO depositBalance(BalanceDTO dto){
 
         if (dto.amount().equals(BigDecimal.ZERO) || dto.amount().compareTo(BigDecimal.ZERO) < 0){
             throw new FinanceManagerBadRequestException("The amount must be greater than zero!");
+        }
+
+        DepositCategory depositCategory;
+
+        if (dto.categoryId() == null){
+            throw new FinanceManagerBadRequestException("The category id must not be null!");
+        }else{
+            depositCategory = depositCategoryService.findById(dto.categoryId());
         }
 
         User user = userService.findUserByAuth();
@@ -44,6 +54,8 @@ public class TransactionService {
         transaction.setDescription("Deposit in value of " + dto.amount() + " to " + user.getEmail() + " account.");
         transaction.setAmount(dto.amount());
         transaction.setTransactiontype(TransactionType.DEPOSIT);
+        transaction.setDepositCategory(depositCategory);
+        transaction.setDate(dto.date());
         transaction.setUser(user);
 
         log.info("Transaction successfully deposited! value of {} to  {} account", dto.amount(), user.getEmail());
@@ -65,7 +77,7 @@ public class TransactionService {
             throw new FinanceManagerBadRequestException("The amount must be greater than zero!");
         }
 
-        WithdrawCategory withdrawCategory = new WithdrawCategory();
+        WithdrawCategory withdrawCategory;
 
         if (dto.categoryId() == null){
             throw new FinanceManagerBadRequestException("The category id must not be null!");
@@ -95,37 +107,54 @@ public class TransactionService {
         return new TransactionResponseDTO(transaction, wallet);
     }
 
-    @Transactional(readOnly = true)
-    public List<WithdrawTransactionResponseDTO> findAllWithdrawTransactions(){
-        User user = userService.findUserByAuth();
-        List<Transaction> transactions = transactionRepository.myAllExpensesTransactions(user.getId());
-        return transactions.stream().map(WithdrawTransactionResponseDTO::new).collect(Collectors.toList());
+    @Transactional
+    public TransactionResponseDTO editTransaction(String id, TransactionEditDTO dto){
+
+        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(()
+                -> new FinanceManagerNotFoundException("Cannot find transaction with id: " + id));
+
+        Wallet wallet = walletService.findWallet();
+
+        updateWalletBalance(transaction, dto);
+        copyEditData(dto, transaction);
+
+        return new TransactionResponseDTO(transaction, wallet);
     }
 
     @Transactional
-    public WithdrawTransactionResponseDTO editTransaction(String id, WithdrawTransactionEditDTO dto){
-        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() -> new FinanceManagerNotFoundException("Cannot find transaction with id: " + id));
+    protected void updateWalletBalance(Transaction transaction, TransactionEditDTO dto){
 
         BigDecimal oldBalance = transaction.getAmount();
-        copyEditData(dto, transaction);
-        BigDecimal newBalance = transaction.getAmount();
+        BigDecimal newBalance = dto.amount();
 
-        if (oldBalance.compareTo(newBalance) != 0){
+        TransactionType type = transaction.getTransactiontype();
 
-            if(newBalance.compareTo(oldBalance) > 0){
-                BigDecimal diff = newBalance.subtract(oldBalance);
-                this.walletService.updateBalance(diff, TransactionType.WITHDRAW);
-            }else{
-                BigDecimal diff = oldBalance.subtract(newBalance);
-                this.walletService.updateBalance(diff, TransactionType.DEPOSIT);
+        if (oldBalance.compareTo(newBalance) != 0) {
+            if (type.equals(TransactionType.WITHDRAW)){
+
+                if(newBalance.compareTo(oldBalance) > 0){
+                    BigDecimal diff = newBalance.subtract(oldBalance);
+                    this.walletService.updateBalance(diff, TransactionType.WITHDRAW);
+                }else{
+                    BigDecimal diff = oldBalance.subtract(newBalance);
+                    this.walletService.updateBalance(diff, TransactionType.DEPOSIT);
+                }
+
+            } else {
+
+                if(newBalance.compareTo(oldBalance) > 0){
+                    BigDecimal diff = newBalance.subtract(oldBalance);
+                    this.walletService.updateBalance(diff, TransactionType.DEPOSIT);
+                } else {
+                    BigDecimal diff = oldBalance.subtract(newBalance);
+                    this.walletService.updateBalance(diff, TransactionType.WITHDRAW);
+                }
             }
         }
-        return new WithdrawTransactionResponseDTO(transaction);
     }
 
     @Transactional
     public void deleteTransaction(String id){
-
         if(!transactionRepository.existsById(id)){
             throw new FinanceManagerNotFoundException("Cannot find transaction with id: " + id);
         }
@@ -133,21 +162,77 @@ public class TransactionService {
     }
 
     @Transactional
-    protected Transaction copyEditData(WithdrawTransactionEditDTO dto, Transaction transaction){
+    protected Transaction copyEditData(TransactionEditDTO dto, Transaction transaction){
         // cleaning data
         BigDecimal amount = dto.amount() != null ? dto.amount() : transaction.getAmount();
         String description = dto.description() != null ? dto.description() : transaction.getDescription();
         Instant date = dto.date() != null ? dto.date() : transaction.getDate();
-
-        WithdrawCategory category = dto.categoryId() != null ? withdrawCategoryService.findById(dto.categoryId()) : transaction.getWithdrawCategory();
-
+        defineCategory(dto.categoryId(), transaction);
         transaction.setDescription(description);
         transaction.setAmount(amount);
         transaction.setDate(date);
-        transaction.setWithdrawCategory(category);
 
         return transaction;
     }
 
-}
+    @Transactional
+    protected void defineCategory(Long id, Transaction transaction){
+        if (id != null){
 
+            if (transaction.getTransactiontype() == TransactionType.WITHDRAW){
+                WithdrawCategory withdrawCategory = withdrawCategoryService.findById(id);
+                transaction.setWithdrawCategory(withdrawCategory);
+
+            } else {
+                DepositCategory depositCategory = depositCategoryService.findById(id);
+                System.out.println("Categoria que sera alterada: "+ depositCategory);
+                transaction.setDepositCategory(depositCategory);
+            }
+
+        } else {
+
+            if (transaction.getTransactiontype() == TransactionType.WITHDRAW){
+                transaction.setWithdrawCategory(transaction.getWithdrawCategory());
+
+            } else {
+                transaction.setDepositCategory(transaction.getDepositCategory());
+            }
+
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionResponseDTO> findAllWithdrawTransactions(){
+        return auxFindAll("WITHDRAW");
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionResponseDTO> findAllDepositTransactions(){
+        return auxFindAll("DEPOSIT");
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionResponseDTO> findAllExtractsByUser(){
+        return auxFindAll("EXTRACT");
+    }
+
+    protected List<TransactionResponseDTO> auxFindAll(String tipe){
+        User user = userService.findUserByAuth();
+        Wallet wallet = walletService.findWallet();
+
+        List<Transaction> transactions;
+
+        if (tipe.equals("WITHDRAW")){
+            transactions = transactionRepository.myAllExpensesTransactions(user.getId());
+        } else if (tipe.equals("DEPOSIT")) {
+            transactions = transactionRepository.myAllDepositTransactions(user.getId());
+        } else{
+            transactions = transactionRepository.findAllTransactionsByUserId(user.getId());
+        }
+
+        transactions.stream()
+
+//        return transactions.stream().map(obj -> new TransactionResponseDTO(obj, wallet)).collect(Collectors.toList());
+    }
+
+}

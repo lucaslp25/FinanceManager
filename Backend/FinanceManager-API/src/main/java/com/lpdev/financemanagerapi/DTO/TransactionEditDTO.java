@@ -6,7 +6,7 @@ import jakarta.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public record WithdrawTransactionEditDTO(
+public record TransactionEditDTO(
 
         @Nullable
         BigDecimal amount,
@@ -21,7 +21,7 @@ public record WithdrawTransactionEditDTO(
         Instant date
 ) {
 
-    public WithdrawTransactionEditDTO(Transaction entity){
+    public TransactionEditDTO(Transaction entity){
         this(entity.getAmount(), entity.getDescription(), entity.getWithdrawCategory().getId(), entity.getDate());
     }
 

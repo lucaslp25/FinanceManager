@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { WithdrawTransactionResponseDTO } from '../../models/transaction';
+import { TransactionResponseDTO } from '../../models/transaction';
 import { CommonModule } from '@angular/common';
 import { Modal } from "../../../shared/components/modal/modal";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,7 +23,7 @@ export class MyExpenses implements OnInit {
 
   public isEditModalOpen = signal(false);
   public isExcludeModalOpen = signal(false);
-  public currentTransaction = signal<WithdrawTransactionResponseDTO | null>(null);
+  public currentTransaction = signal<TransactionResponseDTO | null>(null);
 
 
   editForm = new FormGroup({
@@ -35,13 +35,13 @@ export class MyExpenses implements OnInit {
   })
 
 
-  onExclude(transaction: WithdrawTransactionResponseDTO): void{
+  onExclude(transaction: TransactionResponseDTO): void{
     this.isExcludeModalOpen.set(true);
     this.currentTransaction.set(transaction);
   }
 
 
-  onEdit(transaction: WithdrawTransactionResponseDTO):void{
+  onEdit(transaction: TransactionResponseDTO):void{
     const formattedDate = this.formatDateForInput(transaction.date);
 
     this.editForm.patchValue({
@@ -65,13 +65,14 @@ export class MyExpenses implements OnInit {
       amount: this.editForm.value.amount ?? null,
       description: this.editForm.value.description ?? null,
       categoryId: this.editForm.value.categoryId ?? null,
-      date: new Date(this.editForm.value.date as string).toISOString() ?? null
+      date: new Date(this.editForm.value.date as string).toISOString() ?? null,
+      transactionType: this.currentTransaction()?.transactionType ?? 'WITHDRAW'
     }
 
     const transactionId = this.currentTransaction()?.transactionId;
     
     if (transactionId){
-      this.state.editWithdrawTransaction(dto, transactionId);
+      this.state.editTransaction(dto, transactionId);
     }
 
     this.isEditModalOpen.set(false);
@@ -82,7 +83,7 @@ export class MyExpenses implements OnInit {
     
     const transactionId = this.currentTransaction()?.transactionId;
     
-    this.state.deleteWithdrawTransactio(transactionId!);
+    this.state.deleteTransaction(transactionId!);
     this.isExcludeModalOpen.set(false);
   }
 

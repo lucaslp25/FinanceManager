@@ -1,8 +1,8 @@
 package com.lpdev.financemanagerapi.controllers;
 
-import com.lpdev.financemanagerapi.DTO.WithdrawCategoryDTO;
-import com.lpdev.financemanagerapi.DTO.WithdrawCategoryResponseDTO;
-import com.lpdev.financemanagerapi.services.WithdrawCategoryService;
+import com.lpdev.financemanagerapi.DTO.DepositCategoryDTO;
+import com.lpdev.financemanagerapi.DTO.DepositCategoryResponseDTO;
+import com.lpdev.financemanagerapi.services.DepositCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,29 +12,29 @@ import java.net.URI;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "/api/withdraw-category")
+@RequestMapping(value = "/api/deposit-category")
 @RequiredArgsConstructor
-public class WithdrawCategoryController {
+public class DepositCategoryController {
 
-    private final WithdrawCategoryService service;
+    private final DepositCategoryService service;
 
     @GetMapping
-    public ResponseEntity<Set<WithdrawCategoryResponseDTO>> findAllCategories(){
-        Set<WithdrawCategoryResponseDTO> response = service.findAll();
+    public ResponseEntity<Set<DepositCategoryResponseDTO>> findAllCategories(){
+        Set<DepositCategoryResponseDTO> response = service.findAll();
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<WithdrawCategoryResponseDTO> createCategory(@RequestBody WithdrawCategoryDTO dto){
-        WithdrawCategoryResponseDTO response = service.create(dto);
+    public ResponseEntity<DepositCategoryResponseDTO> createCategory(@RequestBody DepositCategoryDTO dto){
+        DepositCategoryResponseDTO response = service.create(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping(value = "/{id}/update")
-    public ResponseEntity<WithdrawCategoryResponseDTO> updateCategory(@RequestBody WithdrawCategoryDTO dto, @PathVariable Long id){
-        WithdrawCategoryResponseDTO response = service.updateCategory(id, dto);
+    public ResponseEntity<DepositCategoryResponseDTO> updateCategory(@RequestBody DepositCategoryDTO dto, @PathVariable Long id){
+        DepositCategoryResponseDTO response = service.updateCategory(id, dto);
         return ResponseEntity.ok().body(response);
     }
 

@@ -1,10 +1,13 @@
 export interface TransactionResponseDTO{
-    id: number;
+    transactionId: string;
+    date: Date;
+    categoryName: string;
     transactionType: 'DEPOSIT' | 'WITHDRAW';
     amount: number;
     newBalance: number;
-    message: string;
+    description: string;
     userId: number;
+    categoryId: number;
 }
 
 export interface WithdrawDTO{
@@ -13,18 +16,16 @@ export interface WithdrawDTO{
     description?: string;
 }
 
-export interface WithdrawTransactionResponseDTO{
-    transactionId: string;
-    date: Date;
+export interface BalanceDTO{
     amount: number;
     categoryId: number;
-    categoryName: string;
-    description: string;
+    description?: string;
 }
 
-export interface WithdrawTransactionEditDTO{
+export interface TransactionEditDTO{
     amount: number | null;
     description: string | null;
     categoryId: number | null;
     date: Date | string | null;
+    transactionType: 'DEPOSIT' | 'WITHDRAW';
 }

@@ -38,6 +38,10 @@ public class Transaction implements Serializable {
     private WithdrawCategory withdrawCategory;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "deposit_category_id", referencedColumnName = "id")
+    private DepositCategory depositCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
