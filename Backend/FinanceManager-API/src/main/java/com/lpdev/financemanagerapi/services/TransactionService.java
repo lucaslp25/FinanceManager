@@ -230,9 +230,7 @@ public class TransactionService {
             transactions = transactionRepository.findAllTransactionsByUserId(user.getId());
         }
 
-        transactions.stream()
-
-//        return transactions.stream().map(obj -> new TransactionResponseDTO(obj, wallet)).collect(Collectors.toList());
+        return transactions.stream().map(obj -> new TransactionResponseDTO(obj, wallet)).collect(Collectors.toList());
     }
 
 }
