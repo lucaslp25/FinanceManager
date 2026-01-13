@@ -16,8 +16,17 @@
         <input type="text" placeholder="Último Nome" formControlName="lastName" class="input-linha">
         <input type="text" placeholder="Username (Opcional)" formControlName="username" class="input-linha">
         <input type="email" placeholder="E-mail" formControlName="email" class="input-linha">
-        <input type="password" placeholder="Senha" formControlName="password" class="input-linha">
-        <input type="password" placeholder="Confirme sua Senha" formControlName="passwordConfirm" class="input-linha">
+        
+        <div class="input-senha">
+            <input [type]="showPassword ? 'text' : 'password'" placeholder="Senha" formControlName="password" class="input-linha">
+            <i (click)="togglePassword()" [ngClass]="{'bi bi-eye-fill': !showPassword, 'bi bi-eye-slash-fill': showPassword}" class="bi bi-eye-fill" style="font-size: 1.2rem;"></i>
+        </div>
+        
+        <div class="input-senha">
+            <input [type]="showPassword ? 'text' : 'password'" placeholder="Confirme sua Senha" formControlName="passwordConfirm" class="input-linha">
+            <i (click)="togglePassword()" [ngClass]="{'bi bi-eye-fill': !showPassword, 'bi bi-eye-slash-fill': showPassword}" class="bi bi-eye-fill" style="font-size: 1.2rem;"></i>
+        </div>
+
         
         <button class="form-btn" type="submit">
             <span *ngIf="!loading()">Registrar-se</span>

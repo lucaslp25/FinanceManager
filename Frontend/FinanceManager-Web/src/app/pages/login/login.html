@@ -1,12 +1,18 @@
 <div class="login-container">
+<!-- 
     <div class="title-container">
         <div class="u-col main-title">
             <h1>Bem-vindo ao Finance Manager</h1>
             <h3>Sua ajuda diária com as suas finanças!</h3>
         </div>
-    </div>
+    </div> -->
 
     <div class="login-form-container">
+        <div class="u-col main-title">
+            <h1>Bem-vindo ao Finance Manager</h1>
+            <h3>Sua ajuda diária com as suas finanças!</h3>
+        </div> 
+
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">        
             <div class="title">
                 <div class="u-row u-align-center u-gap-sm">
@@ -20,7 +26,11 @@
             
 
             <div class="u-col u-gap-sm">
-                <input type="password" placeholder="Senha" formControlName="password"  class="input-linha">
+                <div class="input-senha">
+                    <input [type]="showPassword ? 'text' : 'password'" placeholder="Senha" formControlName="password"  class="input-linha">
+                    
+                    <i (click)="togglePassword()" [ngClass]="{'bi bi-eye-fill': !showPassword, 'bi bi-eye-slash-fill': showPassword}" class="bi bi-eye-fill" style="font-size: 1.2rem;"></i>
+                </div>
                 <a href="#" class="forgot">Esqueceu sua senha?</a>
             </div>
 
@@ -34,6 +44,5 @@
             </div>
         </form>
     </div>
+    <app-footer></app-footer> 
 </div>
-
-<app-footer></app-footer>

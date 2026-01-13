@@ -53,3 +53,14 @@
 
     }
 }
+
+.input-senha{
+    display: flex;
+    position: relative;
+
+    i{
+        position: absolute;
+        top: 0;
+        right: 10px;
+    }
+}

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { LoginDTO } from '../../core/models/auth';
 import { Footer } from "../../layouts/footer/footer";
+import { sign } from 'chart.js/helpers';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,13 @@ export class Login {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private auth = inject(AuthService);
+
+  public showPassword: boolean = false;
+
+  togglePassword(){
+    this.showPassword = !this.showPassword
+  }
+
 
   loading = signal(false);
   error = signal<String | null>(null);

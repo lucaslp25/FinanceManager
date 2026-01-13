@@ -18,6 +18,12 @@ export class Register {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  public showPassword: boolean = false;
+
+  togglePassword(){
+    this.showPassword = !this.showPassword
+  }
+
   loading = signal(false);
   error = signal<string | null>(null);
 
