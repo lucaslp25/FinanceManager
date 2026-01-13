@@ -19,9 +19,10 @@
 
 .wallet-container{
     background-color: var(--color-surface);
-    padding: 1rem;
+    padding: 2rem;
     border-radius: 12px;
-    box-shadow: var(--shadow-md);
+    // box-shadow: var(--shadow-md);
+    box-shadow: 10px 7px 0px var(--color-text-soft);
     width: 400px;
 
     display: flex;
