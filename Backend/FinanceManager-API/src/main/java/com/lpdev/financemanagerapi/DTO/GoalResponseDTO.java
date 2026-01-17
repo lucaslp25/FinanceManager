@@ -1,6 +1,8 @@
 package com.lpdev.financemanagerapi.DTO;
 
 import com.lpdev.financemanagerapi.model.entities.Goal;
+import com.lpdev.financemanagerapi.model.enums.GoalPriority;
+import com.lpdev.financemanagerapi.model.enums.GoalStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -12,8 +14,13 @@ public record GoalResponseDTO(
         String description,
         BigDecimal targetAmount,
         Instant deadline,
-        Instant initDate
-
+        Instant initDate,
+        Double progressPercentage,
+        BigDecimal suggestedMonthlyDeposit,
+        GoalPriority goalPriority,
+        GoalStatus goalStatus,
+        BigDecimal remainingPay,
+        BigDecimal currentAmount
 ) {
 
     public GoalResponseDTO(Goal entity){
@@ -23,7 +30,13 @@ public record GoalResponseDTO(
                 entity.getDescription(),
                 entity.getTargetAmount(),
                 entity.getDeadline(),
-                entity.getInitDate()
+                entity.getInitDate(),
+                entity.getCurrentPercentage(),
+                entity.getSuggestedMonthlyDeposit(),
+                entity.getGoalPriority(),
+                entity.getGoalStatus(),
+                entity.getRemainingPay(),
+                entity.getCurrentAmount()
         );
     }
 }

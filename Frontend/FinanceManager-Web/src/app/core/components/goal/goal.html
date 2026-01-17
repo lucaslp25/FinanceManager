@@ -22,8 +22,9 @@
 
         @for (item of state.goals(); track item.id) {
            
-            <div class="goal-card">
+            <div  class="goal-card">
                 <i class="bi bi-bullseye icon-circle"></i>
+                <i class="bi bi-three-dots-vertical" id="threeDots" (click)="onGeneralModal(item)"></i>
 
                 <div class="card-content">
                     <span class="title">{{item.name}}</span>
@@ -31,6 +32,12 @@
                     <span><span class="extra-content">Valor: </span> {{item.targetAmount | currency: 'BRL'}}</span>
                     <span><span class="extra-content">Prazo: </span> {{item.deadline | date: 'dd/MM/yyyy'}}</span>
                     <span><span class="extra-content">Inicio: </span> {{item.initDate | date: 'dd/MM/yyyy'}}</span>
+                    <p>Progresso: {{ item.progressPercentage | number:'1.0-0'}}%</p>
+                    <mat-progress-bar 
+                    mode="determinate"
+                    [value]="item.progressPercentage | number:'1.0-0'">
+                    </mat-progress-bar>
+
                 </div>
                     
                 <div class="u-row card-actions">
@@ -173,5 +180,66 @@
             
             <button (click)="onCloseNewGoalModal()" class="modal-btn cancel">Cancelar</button>
         </div>
+    </app-modal>
+}
+
+@if (isGeneralModalOpen()) {
+
+    <app-modal title="Gerenciar Meta" (closeRequest)="onCloseNewGoalModal()">
+
+        <div class="general-container">
+
+            <div class="general-modal-content">
+                <h3>Meta: {{currentGoal()?.name}}</h3>
+                <p><b>Valor Alvo:</b> {{currentGoal()?.targetAmount | currency: 'BRL'}}</p>
+                <p><b>Data Limite:</b> {{currentGoal()?.deadline | date: 'dd/MM/yyyy'}}</p>
+                <p><b>Valor guardado:</b> {{currentGoal()?.currentAmount | currency: 'BRL'}}</p>
+                <p><b>Valor Restante:</b> {{currentGoal()?.remainingPay | currency: 'BRL'}}</p>
+                <b>Descrição: </b><p style="font-style: italic;" class="general-field">{{currentGoal()?.description}}</p>
+                <div class="u-row u-gap-md general-field">
+                    <b>Depósito Sugerido: </b><p style="color: var(--color-success);">{{currentGoal()?.suggestedMonthlyDeposit | currency: 'BRL'}}</p>
+                </div>
+                    <p style="margin-top: 1rem;"><b>Progresso: </b>{{currentGoal()?.progressPercentage | number:'1.0-0'}}%</p>
+                <mat-progress-bar 
+                    mode="determinate"
+                    [value]="currentGoal()?.progressPercentage | number:'1.0-0'">
+                </mat-progress-bar>
+            </div>
+            
+            <div class="modal-footer">
+                <button (click)="onCloseNewGoalModal()" class="modal-btn cancel">Fechar</button>
+                <button (click)="onSaveMoney()" class="modal-btn confirm">Guardar dinheiro</button>
+            </div>
+
+        </div>
+    </app-modal>
+}
+
+@if (isSaveMoneyModalOpen()) {
+    <app-modal title="Guardar Dinheiro" (closeRequest)="onCloseNewGoalModal()">
+
+        <div class="save-money-container">
+            <form [formGroup]="saveMoneyForm" class="goal-form">
+                <label for="money-input-goal" class="form-label u-margin-bottom-sm">Quanto você quer guardar?</label>
+                <input type="text" class="form-input" id="money-input-goal" formControlName="amount" 
+                placeholder="R$ 0,00"
+                mask="separator.2"
+                preix="R$ "
+                thousandSeparator="."
+                decimalSeparator=","
+                prefix="R$ "
+                dropSpecialCharacters="true">
+            </form>
+            
+            <div class="u-row u-gap-sm u-margin-bottom-md">
+                <b>Depósito Sugerido: </b><span style="color: var(--color-success);">{{currentGoal()?.suggestedMonthlyDeposit | currency: 'BRL'}}</span>
+            </div>
+            
+            <div class="modal-footer">
+                <button (click)="onCloseNewGoalModal()" class="modal-btn cancel">Fechar</button>
+                <button (click)="onConfirmSaveMoney()" class="modal-btn confirm">Guardar dinheiro</button>
+            </div>
+        </div>  
+
     </app-modal>
 }

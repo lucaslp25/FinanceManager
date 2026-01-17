@@ -10,7 +10,13 @@ export interface GoalResponseDTO{
   description: string;
   targetAmount: number;
   deadline: Date,
-  initDate: Date
+  initDate: Date,
+  progressPercentage: number,
+  suggestedMonthlyDeposit: number,
+  goalPriority: string,
+  goalStatus: string,
+  remainingPay: number;
+  currentAmount: number;
 }
 
 export interface GoalCreateDTO{
@@ -25,6 +31,10 @@ export interface GoalUpdateDTO{
   description: string | null;
   targetAmount: number | null;
   deadline: Date | null
+}
+
+export interface GoalSaveMoneyDTO{
+  amount: number | null;
 }
 
 @Injectable({
@@ -51,5 +61,9 @@ export class GoalService {
   public updateGoal(dto: GoalUpdateDTO, id: number): Observable<GoalResponseDTO>{
     return this.http.patch<GoalResponseDTO>(`${this.UrlBase}/${id}/update`, dto)
   }
-  
+
+  public saveMoneyToGoal(goalId: number, dto: GoalSaveMoneyDTO): Observable<GoalResponseDTO>{
+    return this.http.patch<GoalResponseDTO>(`${this.UrlBase}/${goalId}/save-money`, dto);
+  }
+
 }

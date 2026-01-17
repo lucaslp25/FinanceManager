@@ -6,6 +6,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { authInterceptorInterceptor } from './core/interceptos/auth-interceptor-interceptor';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { MatProgressBar, MatProgressBarModule } from '@angular/material/progress-bar';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(),
     withInterceptors([authInterceptorInterceptor])),
     provideEnvironmentNgxMask(),
-    provideCharts(withDefaultRegisterables())
+    provideCharts(withDefaultRegisterables()),
+    MatProgressBarModule
   ]
 };

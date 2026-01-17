@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface GoalRepository extends JpaRepository<Goal, Long> {
 
-
-
     @Query(nativeQuery = true, value = """
         SELECT * FROM tb_goal g
         WHERE g.user_id = :userId 

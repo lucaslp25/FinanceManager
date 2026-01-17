@@ -2,9 +2,12 @@ package com.lpdev.financemanagerapi.services;
 
 import com.lpdev.financemanagerapi.DTO.GoalCreateDTO;
 import com.lpdev.financemanagerapi.DTO.GoalResponseDTO;
+import com.lpdev.financemanagerapi.DTO.GoalSaveMoneyDTO;
 import com.lpdev.financemanagerapi.DTO.GoalUpdateDTO;
+import com.lpdev.financemanagerapi.exceptions.FinanceManagerBadRequestException;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerNotFoundException;
 import com.lpdev.financemanagerapi.model.entities.Goal;
+import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.repositories.GoalRepository;
 import com.lpdev.financemanagerapi.security.model.entities.User;
 import com.lpdev.financemanagerapi.security.services.UserService;
@@ -23,6 +26,7 @@ public class GoalService {
 
     private final GoalRepository repository;
     private final UserService userService;
+    private final WalletService walletService;
 
     @Transactional(readOnly = true)
     public List<GoalResponseDTO> findAllGoalsByUser(){
@@ -49,18 +53,37 @@ public class GoalService {
         return new GoalResponseDTO(goal);
     }
 
-    @Transactional
     protected void goalEditData(Goal goal, GoalUpdateDTO dto){
 
-        String name = dto.name() != null ? dto.name() : goal.getName();
-        String description = dto.description() != null ? dto.description() : goal.getDescription();
-        BigDecimal targetAmount = dto.targetAmount() != null ? dto.targetAmount() : goal.getTargetAmount();
-        Instant deadline = dto.deadline() != null ? dto.deadline() : goal.getDeadline();
 
-        goal.setName(name);
-        goal.setDescription(description);
-        goal.setTargetAmount(targetAmount);
-        goal.setDeadline(deadline);
+        if (dto.name() != null) goal.setName(dto.name());
+        if (dto.description() != null) goal.setDescription(dto.description());
+        if (dto.deadline() != null) goal.setDeadline(dto.deadline());
+
+        if (dto.targetAmount() != null) {
+            goal.setTargetAmount(dto.targetAmount());
+            goal.recalculateRemaining();
+        }
+    }
+
+    @Transactional
+    public GoalResponseDTO saveMoneyForGoal(Long id, GoalSaveMoneyDTO dto){
+
+        if (dto.amount() == null){
+            throw new FinanceManagerBadRequestException("The amount cannot be null");
+        }
+        Goal goal = repository.findById(id).orElseThrow(
+                () -> new FinanceManagerNotFoundException("Not found Goal with id: " + id)
+        );
+
+        Wallet wallet = walletService.findWallet();
+
+        goal.updateCurrentAmount(dto.amount());
+        goal.updateRemainingPay(dto.amount());
+
+        wallet.decreaseBalance(dto.amount());
+
+        return new GoalResponseDTO(goal);
     }
 
     @Transactional

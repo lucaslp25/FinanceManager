@@ -38,10 +38,9 @@ export class GoalState {
     })
   }
 
-  public deleteGoal(id: number){
-    
+  public deleteGoal(id: number){    
     if (id == null) return;
-   
+
     return this.service.deleteGoal(id).pipe(
       tap(() =>{
         this._goals.update(currentList => currentList.filter(i => i.id !== id))
@@ -50,10 +49,17 @@ export class GoalState {
   }
 
   editGoal(dto: GoalUpdateDTO, id: number): Observable<GoalResponseDTO>{
-
     return this.service.updateGoal(dto, id).pipe(
       tap((data) => {
         this._goals.update(currentList => currentList.map(i => i.id === id ? data : i));
+      })
+    )
+  }
+
+  public saveMoneyToGoal(goalId: number, dto: {amount: number | null}): Observable<GoalResponseDTO>{
+    return this.service.saveMoneyToGoal(goalId, dto).pipe(
+      tap((data) => {
+        this._goals.update(currentList => currentList.map(i => i.id === goalId ? data : i));
       })
     )
   }

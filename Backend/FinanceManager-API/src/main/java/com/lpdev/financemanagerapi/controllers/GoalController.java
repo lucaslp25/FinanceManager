@@ -2,6 +2,7 @@ package com.lpdev.financemanagerapi.controllers;
 
 import com.lpdev.financemanagerapi.DTO.GoalCreateDTO;
 import com.lpdev.financemanagerapi.DTO.GoalResponseDTO;
+import com.lpdev.financemanagerapi.DTO.GoalSaveMoneyDTO;
 import com.lpdev.financemanagerapi.DTO.GoalUpdateDTO;
 import com.lpdev.financemanagerapi.services.GoalService;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,12 @@ public class GoalController {
     public ResponseEntity<Void> deleteGoal(@PathVariable Long id){
         this.service.deleteGoal(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "/{id}/save-money")
+    public ResponseEntity<GoalResponseDTO> saveGoalMoney(@PathVariable Long id,  @RequestBody GoalSaveMoneyDTO dto){
+        GoalResponseDTO response = service.saveMoneyForGoal(id, dto);
+        return ResponseEntity.ok().body(response);
     }
 
 }

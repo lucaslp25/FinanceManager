@@ -19,9 +19,25 @@
 }
 
 
+#threeDots{
+    position: absolute;
+    top: 10px;
+    left: 180px;
+    right: 0px;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-soft);
+    
+    &:hover{
+        color: var(--color-text-strong);
+        cursor: pointer;
+    }
+}
+
+
 .goal-card{
     display: flex;
     flex-direction: column;
+    position: relative;
 
     background-color: var(--color-surface);
     padding: var(--spacing-md);
@@ -43,7 +59,7 @@
             opacity: 1;
         }
     }
-    
+
     .icon-circle{
        width: 50px;
         height: 50px;
@@ -178,4 +194,43 @@
     span{
         color: var(--color-brand-primary);
     }
+}
+
+.general-container{
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md);
+
+    .general-modal-content{
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
+
+        h3{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            margin-bottom: 1em;
+        }
+
+        
+    }
+}
+
+.general-field{
+    background-color: var(--color-bg-soft); 
+    padding: .8rem;
+    border-radius: 12px;
+}
+
+.save-money-container{
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    align-items: center;
 }

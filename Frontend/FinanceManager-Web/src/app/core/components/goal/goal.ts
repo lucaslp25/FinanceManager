@@ -2,12 +2,13 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Modal } from "../../../shared/components/modal/modal";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GoalState } from '../../states/goal-state';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { GoalResponseDTO } from '../../services/goal-service';
+import { MatProgressBar } from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-goal',
-  imports: [Modal, ReactiveFormsModule, CurrencyPipe, DatePipe],
+  imports: [Modal, ReactiveFormsModule, CurrencyPipe, DatePipe, MatProgressBar, DecimalPipe],
   templateUrl: './goal.html',
   styleUrl: './goal.scss',
 })
@@ -16,6 +17,9 @@ export class Goal implements OnInit {
   public isNewGoalModalOpen = signal(false);
   public isEditGoalModalOpen = signal(false);
   public isDeleteGoalModalOpen = signal(false);
+
+  public isGeneralModalOpen = signal(false);
+  public isSaveMoneyModalOpen = signal(false);
 
   public state = inject(GoalState);
 
@@ -27,6 +31,10 @@ export class Goal implements OnInit {
     targetAmount: new FormControl<number | null> (null, [Validators.required, Validators.min(1)]),
     description: new FormControl(''),
     deadline: new FormControl('')
+  })
+
+  saveMoneyForm = new FormGroup({
+    amount: new FormControl<number | null>(null, [Validators.required, Validators.min(1)])
   })
 
 
@@ -58,10 +66,18 @@ export class Goal implements OnInit {
     });
   }
 
+  onGeneralModal(obj: GoalResponseDTO){
+    this.isGeneralModalOpen.set(true);
+    this.currentGoal.set(obj);
+  }
+
   onCloseNewGoalModal(){
     this.isNewGoalModalOpen.set(false);
     this.isEditGoalModalOpen.set(false);
-    this.isDeleteGoalModalOpen.set(false);  
+    this.isDeleteGoalModalOpen.set(false);
+    this.isGeneralModalOpen.set(false);
+    this.isSaveMoneyModalOpen.set(false);
+
   }
 
   onConfirmGoal(){
@@ -120,7 +136,28 @@ export class Goal implements OnInit {
     })
 
     this.isEditGoalModalOpen.set(false);
+  }
+
+  onSaveMoney(){
+    console.log("Guardar dinheiro na meta:", this.currentGoal());
+    this.saveMoneyForm.reset();
+    this.isSaveMoneyModalOpen.set(true);
+    this.isGeneralModalOpen.set(false);
+  }
+
+  onConfirmSaveMoney(){
+    if(!this.currentGoal()) return;
+    const formValues = this.saveMoneyForm.getRawValue();
+
+    const dto = {
+      amount: formValues.amount ? Number(formValues.amount) : null
+    };
     
+    this.state.saveMoneyToGoal(this.currentGoal()!.id, dto).subscribe({
+      next: () => console.log(`Money saved to goal ${this.currentGoal()?.name} successfully.`),
+      error: (err) => console.error("Error in save money to goal..", err)
+    })
+    this.isSaveMoneyModalOpen.set(false);
   }
   
   private formatDateForInput(dateParam: Date | string | null): string {
