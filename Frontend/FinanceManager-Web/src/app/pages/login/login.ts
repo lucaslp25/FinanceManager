@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { LoginDTO } from '../../core/models/auth';
 import { Footer } from "../../layouts/footer/footer";
-import { sign } from 'chart.js/helpers';
 
 @Component({
   selector: 'app-login',
@@ -52,6 +51,8 @@ export class Login {
     this.auth.login(credentials).subscribe({
         next: (dto) => {
           localStorage.setItem('token', dto.token!)
+          localStorage.setItem('user-email', dto.email!)
+          localStorage.setItem('user-role', dto.role!)
           this.router.navigate(['/app'])
         },
         error: (err) => {

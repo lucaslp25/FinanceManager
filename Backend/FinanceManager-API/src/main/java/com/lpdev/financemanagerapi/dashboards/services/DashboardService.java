@@ -3,6 +3,8 @@ package com.lpdev.financemanagerapi.dashboards.services;
 import com.lpdev.financemanagerapi.dashboards.DTO.*;
 import com.lpdev.financemanagerapi.dashboards.projections.DashboardSummaryProjection;
 import com.lpdev.financemanagerapi.dashboards.repositories.DashboardRepository;
+import com.lpdev.financemanagerapi.security.model.entities.User;
+import com.lpdev.financemanagerapi.security.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class DashboardService {
 
     private final DashboardRepository dashboardRepository;
+    private final UserService userService;
 
     // using the dto
     @Transactional(readOnly = true)
@@ -31,9 +34,9 @@ public class DashboardService {
 
         // if the user use the filter, make the request using the mouth filter.
         if (dto.getYear() != null && dto.getMonth() != null){
-            response = dashboardRepository.getCategoryAllocationProjectionsByMonth(dto.getYear(), dto.getMonth(), top5);
+            response = dashboardRepository.getCategoryAllocationProjectionsByMonth(takeUserId(), dto.getYear(), dto.getMonth(), top5);
         } else {
-            response = dashboardRepository.getCategoryAllocationProjections(top5);
+            response = dashboardRepository.getCategoryAllocationProjections(takeUserId(), top5);
         }
 
         System.out.println(response);
@@ -47,9 +50,9 @@ public class DashboardService {
         List<DashboardSummaryProjection> response;
 
         if (dto.getYear() != null && dto.getMonth() != null) {
-            response = dashboardRepository.getDashboardSummaryProjectionsByMonth(dto.getYear(), dto.getMonth());
+            response = dashboardRepository.getDashboardSummaryProjectionsByMonth(takeUserId(), dto.getYear(), dto.getMonth());
         }else {
-            response = dashboardRepository.getAllDashboardSummaryProjections();
+            response = dashboardRepository.getAllDashboardSummaryProjections(takeUserId());
         }
 
         System.out.println(response);
@@ -61,7 +64,7 @@ public class DashboardService {
 
         if (year == null) year = LocalDate.now().getYear();
 
-        List<DashEvolutionDTO> rawData = dashboardRepository.getYearlyEvolution(year);
+        List<DashEvolutionDTO> rawData = dashboardRepository.getYearlyEvolution(takeUserId(), year);
         List<DashEvolutionDTO> fullData = new ArrayList<>();
 
         for (int i = 1; i <= 12; i++) {
@@ -87,13 +90,18 @@ public class DashboardService {
         Pageable top = PageRequest.of(0, size);
 
         if (dto.getYear() != null && dto.getMonth() != null){
-            response = dashboardRepository.getTopExpensesTransactionsByMonth(dto.getYear(), dto.getMonth(), top);
+            response = dashboardRepository.getTopExpensesTransactionsByMonth(takeUserId(), dto.getYear(), dto.getMonth(), top);
         } else {
-            response = dashboardRepository.getTopExpensesTransactionsAllTime(top);
+            response = dashboardRepository.getTopExpensesTransactionsAllTime(takeUserId(), top);
         }
         // debug
         System.out.println(response);
         return response;
+    }
+
+    private Long takeUserId(){
+        User user = userService.findUserByAuth();
+        return user.getId();
     }
 
 }

@@ -10,4 +10,5 @@ public interface DashboardSummaryProjection {
     Integer getAno();
     BigDecimal getTotalDeposit();
     BigDecimal getTotalWithdraw();
+    Long getUserId();
 }

@@ -19,6 +19,12 @@ export class TransactionState {
   private _transactions = signal<TransactionResponseDTO[]>([]);
   public transactions = this._transactions.asReadonly();
 
+  public resetState() {
+    this._expenses.set([]);
+    this._deposits.set([]);
+    this._transactions.set([]);
+  }
+
   public loadExpenses(){
     return this.service.loadMyExpenseList().subscribe({
       next: (next) => {

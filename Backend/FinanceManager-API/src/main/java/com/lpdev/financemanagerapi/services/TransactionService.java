@@ -197,7 +197,6 @@ public class TransactionService {
             } else {
                 transaction.setDepositCategory(transaction.getDepositCategory());
             }
-
         }
     }
 

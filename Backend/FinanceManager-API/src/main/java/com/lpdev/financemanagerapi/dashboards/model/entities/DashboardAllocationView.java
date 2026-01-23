@@ -26,4 +26,7 @@ public class DashboardAllocationView {
     private Integer a_year;
 
     private BigDecimal total;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

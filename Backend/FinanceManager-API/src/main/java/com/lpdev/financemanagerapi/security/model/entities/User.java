@@ -1,8 +1,6 @@
 package com.lpdev.financemanagerapi.security.model.entities;
 
-import com.lpdev.financemanagerapi.model.entities.Goal;
-import com.lpdev.financemanagerapi.model.entities.Transaction;
-import com.lpdev.financemanagerapi.model.entities.Wallet;
+import com.lpdev.financemanagerapi.model.entities.*;
 import com.lpdev.financemanagerapi.security.model.enums.UserRole;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -65,6 +63,12 @@ public class User implements Serializable, UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Goal> goals = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<WithdrawCategory> withdraw_categories;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DepositCategory> deposit_categories;
 
     @Builder
     public User(String username, String email, String password, String firstName, String lastName){

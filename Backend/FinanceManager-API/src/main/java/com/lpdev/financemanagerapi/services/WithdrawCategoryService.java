@@ -5,6 +5,8 @@ import com.lpdev.financemanagerapi.DTO.WithdrawCategoryResponseDTO;
 import com.lpdev.financemanagerapi.exceptions.FinanceManagerBadRequestException;
 import com.lpdev.financemanagerapi.model.entities.WithdrawCategory;
 import com.lpdev.financemanagerapi.repositories.WithdrawCategoryRepository;
+import com.lpdev.financemanagerapi.security.model.entities.User;
+import com.lpdev.financemanagerapi.security.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +20,14 @@ import java.util.stream.Collectors;
 public class WithdrawCategoryService {
 
     private final WithdrawCategoryRepository withdrawCategoryRepository;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public Set<WithdrawCategoryResponseDTO> findAll(){
-        List<WithdrawCategory> withdrawCategories = withdrawCategoryRepository.findAll();
+
+        User user = userService.findUserByAuth();
+        List<WithdrawCategory> withdrawCategories =
+                withdrawCategoryRepository.findAllWithdrawCategoriesByUser(user.getId());
         return withdrawCategories.stream().
                 map(WithdrawCategoryResponseDTO::new)
                 .collect(Collectors.toSet());
@@ -31,6 +37,7 @@ public class WithdrawCategoryService {
     public WithdrawCategoryResponseDTO create(WithdrawCategoryDTO dto){
         WithdrawCategory newCategory = new WithdrawCategory();
         newCategory.setName(dto.name().toUpperCase());
+        newCategory.setUser(userService.findUserByAuth());
         withdrawCategoryRepository.save(newCategory);
         return new WithdrawCategoryResponseDTO(newCategory);
     }
@@ -56,6 +63,5 @@ public class WithdrawCategoryService {
         return withdrawCategoryRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("No WithdrawCategory found with id: " + id));
     }
-
 
 }

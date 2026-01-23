@@ -16,6 +16,9 @@ export class WithdrawCategoryState {
   //for know if alredy´s loaded
   private loaded = false;
 
+  public resetState() {
+    this._categories.set([]);
+  }
   public load(){
     if (this.loaded) return;
     

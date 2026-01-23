@@ -14,6 +14,10 @@ export class GoalState {
   public goals = this._goals.asReadonly();
   private goalsLoaded = signal(false);
 
+  public resetState() {
+    this._goals.set([]);
+  }
+
   public createGoal(dto: GoalCreateDTO){
     return this.service.createGoal(dto).pipe(
       tap((data) => {

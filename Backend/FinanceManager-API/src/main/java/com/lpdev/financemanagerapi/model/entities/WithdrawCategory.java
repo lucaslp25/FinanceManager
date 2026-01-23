@@ -1,5 +1,6 @@
 package com.lpdev.financemanagerapi.model.entities;
 
+import com.lpdev.financemanagerapi.security.model.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -26,4 +27,8 @@ public class WithdrawCategory implements Serializable {
 
     @OneToMany(mappedBy = "withdrawCategory", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Transaction> transaction = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
