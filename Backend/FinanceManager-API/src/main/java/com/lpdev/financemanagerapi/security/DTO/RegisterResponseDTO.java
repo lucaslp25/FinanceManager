@@ -10,14 +10,16 @@ public record RegisterResponseDTO(
         String firstName,
         String lastName,
         String email,
-        UserRole role
+        UserRole role,
+        Boolean enabled
 ) {
     public RegisterResponseDTO(User entity){
         this(
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getEmail(),
-                entity.getRole()
+                entity.getRole(),
+                entity.isEnabled()
         );
 
     }

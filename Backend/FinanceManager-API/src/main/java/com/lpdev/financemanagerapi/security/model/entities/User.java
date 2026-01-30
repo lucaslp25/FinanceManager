@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.*;
 
 @Getter
@@ -70,6 +71,20 @@ public class User implements Serializable, UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DepositCategory> deposit_categories;
 
+    // define if user can do the login
+    @Column(nullable = false)
+    private boolean enabled = false;
+
+    // token for email confirm
+    private String verificationCode;
+
+    // token for forgot password
+    private String recoveryToken;
+
+    // validity of recovery token
+    private Instant recoveryTokenExpiry;
+
+
     @Builder
     public User(String username, String email, String password, String firstName, String lastName){
         this.username = username;
@@ -115,7 +130,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
     @PrePersist

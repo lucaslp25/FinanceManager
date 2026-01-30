@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { LoginDTO } from '../../core/models/auth';
 import { Footer } from "../../layouts/footer/footer";
+import { VerifyAccount } from "../verify-account/verify-account";
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, Footer],
+  imports: [CommonModule, ReactiveFormsModule, Footer, VerifyAccount],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

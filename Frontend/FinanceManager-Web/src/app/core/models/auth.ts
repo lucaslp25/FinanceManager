@@ -24,4 +24,5 @@ export interface RegisterResponseDTO {
     lastName?: string;
     email?: string;
     role?: 'USER' | 'ADMIN';
+    enabled: boolean;
 }

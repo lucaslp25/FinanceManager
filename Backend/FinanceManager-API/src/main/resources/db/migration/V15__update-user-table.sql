@@ -1,0 +1,11 @@
+ALTER TABLE tb_user
+ADD COLUMN enabled BOOLEAN DEFAULT TRUE;
+
+ALTER TABLE tb_user
+ADD COLUMN verification_code VARCHAR(255);
+
+ALTER TABLE tb_user
+ADD COLUMN recovery_token VARCHAR(255);
+
+ALTER TABLE tb_user
+ADD COLUMN recovery_token_expiry TIMESTAMP WITH TIME ZONE;

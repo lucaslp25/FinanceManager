@@ -11,12 +11,14 @@ import { Dashboard } from './core/components/dashboard/dashboard';
 import { Goal } from './core/components/goal/goal';
 import { MyExtract } from './core/components/my-extract/my-extract';
 import { DepositCategories } from './core/components/deposit-categories/deposit-categories';
+import { VerifyAccount } from './pages/verify-account/verify-account';
 
 export const routes: Routes = [
     // login is the default route 
     {path: '', redirectTo: 'login', pathMatch: 'full'},
     {path: 'login', component: Login, title: 'Finance Manager - Login', canActivate: [loginGuardGuard]},
     {path: 'register', component: Register, title: 'Finance Manager - Register', canActivate: [loginGuardGuard]},
+    {path: 'email-verification', component: VerifyAccount, title: 'Finance Manager - Verify Account', canActivate: [loginGuardGuard]},
     
     {path: 'app', component: App, title: 'Finance Manager - Home', canActivate: [authGuard],
         children: [
