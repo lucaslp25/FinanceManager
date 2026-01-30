@@ -18,6 +18,8 @@ export class Register {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  timeToConfirm = signal(false)
+
   public showPassword: boolean = false;
 
   togglePassword(){
@@ -60,7 +62,11 @@ export class Register {
     };
 
     this.auth.register(credentials).subscribe({
-      next: () => this.router.navigate(['/login']),
+      next: () =>
+      {
+        this.timeToConfirm.set(true);
+        this.router.navigate(['/login']);
+      },
       error: (err) => console.error("Error in register request: ", err),
       complete: () => this.loading.set(false)
     })
@@ -68,5 +74,10 @@ export class Register {
 
   backToLogin(){
    this.router.navigate(['/login']); 
+  }
+
+  onCloseModal(){
+    this.timeToConfirm.set(false);
+    this.form.reset();
   }
 }

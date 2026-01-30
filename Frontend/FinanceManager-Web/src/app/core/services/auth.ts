@@ -11,7 +11,6 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
-
   private baseURL = `${environment.apiUrl}/auth`;
 
   login(credentials: LoginDTO): Observable<LoginResponseDTO>{
@@ -21,6 +20,16 @@ export class AuthService {
 
   register(credentials: RegisterDTO): Observable<RegisterResponseDTO>{
     return this.http.post<RegisterResponseDTO>(`${this.baseURL}/register`, credentials)
+    .pipe(catchError(this.handleError));
+  }
+  
+  emailConfirmation(token: string): Observable<Boolean>{
+    return this.http.post<Boolean>(`${this.baseURL}/${token}/verification`, token)
+    .pipe(catchError(this.handleError));
+  }
+  
+  enableAccount(token: string): Observable<any>{
+    return this.http.patch<any>(`${this.baseURL}/enable-user`, token)
     .pipe(catchError(this.handleError));
   }
   

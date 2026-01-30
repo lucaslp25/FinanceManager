@@ -49,4 +49,16 @@ public class UserController {
         return ResponseEntity.ok("Sua conta foi verificada com sucesso! Você ja pode fazer o seu login.");
     }
 
+    @PostMapping(value = "/{token}/verification")
+    public ResponseEntity<Boolean> confirmToken(@RequestBody String token){
+        Boolean response = userService.tokenVerification(token);
+        return ResponseEntity.ok().body(true);
+    }
+
+    @PatchMapping(value = "/enable-user")
+    public ResponseEntity<Void> enableUser(@RequestBody String token){
+        userService.enableAccount(token);
+        return ResponseEntity.noContent().build();
+    }
+
 }

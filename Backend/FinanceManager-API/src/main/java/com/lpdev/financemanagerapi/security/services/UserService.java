@@ -14,6 +14,7 @@ import com.lpdev.financemanagerapi.security.DTO.RegisterResponseDTO;
 import com.lpdev.financemanagerapi.security.model.entities.User;
 import com.lpdev.financemanagerapi.security.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -36,13 +38,11 @@ public class UserService {
     private final WalletRepository walletRepository;
     private final EmailService emailService;
 
-    @Value("${api.frontend.url}r")
+    @Value("${api.frontend.url}")
     private String frontend_url; // dinamic link for front end (dev, prod)
 
     @Transactional
     public RegisterResponseDTO userRegister(RegisterDTO dto){
-
-        // depois adicionar validações aqui mandando erro do tipo bad request e mandando pro global handler para ver se a mensagem vai para o postman.
 
         if (userRepository.findByEmail(dto.email()).isPresent()){
             throw new FinanceManagerConflictException("The e-mail " + dto.email() + " already´s registered.");
@@ -55,16 +55,11 @@ public class UserService {
         String subject = "Your Verification Code - FinanceManager";
         String emailBody = String.format(
                 """
-                Olá, %s Seja Bem-vindo ao Finance Manager!
-                
-                
-                Clique no link abaixo para ativar sua conta.
-                
-                
-                %s
-                
-                
-                Se você não criou a conta, ignore esse e-mail.
+                <p>Olá, %s </p>
+                <p>Seja Bem-vindo ao Finance Manager!</p>
+                <p>Clique no link abaixo para ativar sua conta.</p>
+                <a href="%s">Clique para ativar sua conta!</a>
+                <p>Se você não criou a conta, ignore esse e-mail.</p>
                 """, dto.firstName(), tokenLink);
 
         emailService.sendEmail(dto.email(), subject, emailBody);
@@ -124,10 +119,28 @@ public class UserService {
         }
 
         user.setEnabled(true);
-
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
+    public User findUserByVerificationToken(String token){
+        return userRepository.findUserByVerificationCode(token).orElseThrow(() ->
+                new FinanceManagerNotFoundException("Not found user with token: " + token));
+    }
+
+
+    @Transactional(readOnly = true)
+    public boolean tokenVerification(String token){
+        User user = findUserByVerificationToken(token);
+        return user.getVerificationCode().equals(token) ? true : false;
+    }
+
+    @Transactional
+    public void enableAccount(String token){
+        User user = findUserByVerificationToken(token);
+        user.setEnabled(true);
+        log.info("User {} enabled successfully", user.getEmail());
+    }
 
 
 }

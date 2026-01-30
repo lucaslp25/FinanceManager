@@ -1,12 +1,4 @@
 <div class="login-container">
-<!-- 
-    <div class="title-container">
-        <div class="u-col main-title">
-            <h1>Bem-vindo ao Finance Manager</h1>
-            <h3>Sua ajuda diária com as suas finanças!</h3>
-        </div>
-    </div> -->
-
     <div class="login-form-container">
         <div class="u-col main-title">
             <h1>Bem-vindo ao Finance Manager</h1>
@@ -47,4 +39,7 @@
     <app-footer></app-footer> 
 </div>
 
-<app-verify-account></app-verify-account>
+
+@if (isVerifing()) {
+    <app-verify-account></app-verify-account>
+}

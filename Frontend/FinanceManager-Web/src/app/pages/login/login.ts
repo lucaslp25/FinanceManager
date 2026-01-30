@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { LoginDTO } from '../../core/models/auth';
 import { Footer } from "../../layouts/footer/footer";
 import { VerifyAccount } from "../verify-account/verify-account";
+import { O } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-login',
@@ -13,18 +14,19 @@ import { VerifyAccount } from "../verify-account/verify-account";
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements OnInit{
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private auth = inject(AuthService);
+
+  public isVerifing = signal(false);
 
   public showPassword: boolean = false;
 
   togglePassword(){
     this.showPassword = !this.showPassword
   }
-
 
   loading = signal(false);
   error = signal<String | null>(null);
@@ -71,4 +73,17 @@ export class Login {
   onRegister(): void{
     this.router.navigate(['/register']);
   }
+
+
+  verifyCurrentURL(){
+    const param = new URLSearchParams(window.location.search);
+    const token = param.get('token');
+    if (token) this.isVerifing.set(true); 
+  }
+
+  ngOnInit(): void {
+    this.verifyCurrentURL();
+  }
+
+
 }

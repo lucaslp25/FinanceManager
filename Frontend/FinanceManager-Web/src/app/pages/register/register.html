@@ -26,7 +26,7 @@
             <input [type]="showPassword ? 'text' : 'password'" placeholder="Confirme sua Senha" formControlName="passwordConfirm" class="input-linha">
             <i (click)="togglePassword()" [ngClass]="{'bi bi-eye-fill': !showPassword, 'bi bi-eye-slash-fill': showPassword}" class="bi bi-eye-fill" style="font-size: 1.2rem;"></i>
         </div>
-
+        
         
         <button class="form-btn" type="submit">
             <span *ngIf="!loading()">Registrar-se</span>
@@ -35,3 +35,20 @@
     </form>
 </div>
 <app-footer></app-footer>    
+
+
+@if (timeToConfirm()) {
+
+    <div class="overlay">
+        <div class="modal">
+            <div class="close-button">
+                <i (click)="onCloseModal()" class="bi bi-x-lg"></i>
+            </div>
+            <div class="modal-content">
+                <div style="font-size: 2rem;">Enviamos um e-mail para você confirmar e ativar sua conta!</div>
+                <div style="font-size: 1.5rem;">Verifique sua caixa de entrada, se estiver vazia, verifique a caixa de spam.</div>
+            </div>
+        </div>
+    </div>
+}
+

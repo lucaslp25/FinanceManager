@@ -28,7 +28,7 @@ services:
     container_name: finance_db_dev 
     restart: always
     environment:
-      POSTGRES_DB: finance_db_dev
+      POSTGRES_DB: finance_db_dev 
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
     ports:

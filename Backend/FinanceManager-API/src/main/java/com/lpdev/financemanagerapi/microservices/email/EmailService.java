@@ -1,5 +1,7 @@
 package com.lpdev.financemanagerapi.microservices.email;
 
+import com.lpdev.financemanagerapi.security.model.entities.User;
+import com.lpdev.financemanagerapi.security.services.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +43,5 @@ public class EmailService {
             log.error("Error on sent email: ", ex);
             // in production could save the errors in a separate table
         }
-
     }
-
 }
