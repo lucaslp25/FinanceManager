@@ -62,11 +62,7 @@ export class Register {
     };
 
     this.auth.register(credentials).subscribe({
-      next: () =>
-      {
-        this.timeToConfirm.set(true);
-        this.router.navigate(['/login']);
-      },
+      next: () => this.timeToConfirm.set(true),
       error: (err) => console.error("Error in register request: ", err),
       complete: () => this.loading.set(false)
     })
@@ -79,5 +75,6 @@ export class Register {
   onCloseModal(){
     this.timeToConfirm.set(false);
     this.form.reset();
+    this.router.navigate(['/login']);
   }
 }
