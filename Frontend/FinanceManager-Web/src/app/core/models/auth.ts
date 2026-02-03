@@ -26,3 +26,8 @@ export interface RegisterResponseDTO {
     role?: 'USER' | 'ADMIN';
     enabled: boolean;
 }
+
+export interface ChangePasswordDTO{
+    recoveryToken? :string;
+    newPassword? :string;
+}

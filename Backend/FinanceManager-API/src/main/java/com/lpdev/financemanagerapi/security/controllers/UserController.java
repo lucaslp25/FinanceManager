@@ -1,9 +1,6 @@
 package com.lpdev.financemanagerapi.security.controllers;
 
-import com.lpdev.financemanagerapi.security.DTO.LoginDTO;
-import com.lpdev.financemanagerapi.security.DTO.LoginResponseDTO;
-import com.lpdev.financemanagerapi.security.DTO.RegisterDTO;
-import com.lpdev.financemanagerapi.security.DTO.RegisterResponseDTO;
+import com.lpdev.financemanagerapi.security.DTO.*;
 import com.lpdev.financemanagerapi.security.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +55,18 @@ public class UserController {
     @PatchMapping(value = "/enable-user")
     public ResponseEntity<Void> enableUser(@RequestBody String token){
         userService.enableAccount(token);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{email}/password-recovery")
+    public ResponseEntity<Void> forgotPassword (@RequestBody String email){
+        userService.forgotPassword(email);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "/password-recovery")
+        public ResponseEntity<Void> resetPassword(@RequestBody ChangePasswordDTO dto){
+        userService.changePassword(dto);
         return ResponseEntity.noContent().build();
     }
 

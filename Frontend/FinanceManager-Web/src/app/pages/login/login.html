@@ -23,7 +23,7 @@
                     
                     <i (click)="togglePassword()" [ngClass]="{'bi bi-eye-fill': !showPassword, 'bi bi-eye-slash-fill': showPassword}" class="bi bi-eye-fill" style="font-size: 1.2rem;"></i>
                 </div>
-                <a href="#" class="forgot">Esqueceu sua senha?</a>
+                <a (click)="forgotMyPass()" class="forgot">Esqueceu sua senha?</a>
             </div>
 
             <button type="submit" class="form-btn">
@@ -42,4 +42,54 @@
 
 @if (isVerifing()) {
     <app-verify-account></app-verify-account>
+}
+
+@if (showForgotModal()) {
+    <app-modal title="Recuperação de senha", (closeRequest)="onCloseModal()">
+        <form class="forgot-modal-content" [formGroup]="forgotForm">
+            <div class="forgot-modal-body">
+                <h2>Digite seu email cadastrado</h2>
+                <input formControlName="email" class="form-input" type="text" placeholder="example@gmail.com">
+                <span style="color: var(--color-error); font-weight: 600;">{{errorForgotMessage()}}</span>
+                @if (successForgotMessage()) 
+                {
+                    <span class="success-message">
+                        Um e-mail foi enviado para recuperar sua senha! <br> Acesse <a href="http://localhost:8025">http://localhost:8025</a></span>
+                }
+            </div>
+            
+            <div class="modal-footer">
+                <button (click)="onCloseModal()" class="modal-btn cancel">Cancelar</button>
+                <button (click)="onConfirmForgotEmail()" class="modal-btn confirm">Confirmar</button>
+            </div>
+        </form>
+
+    </app-modal>
+}
+
+@if (hasToken()) {
+
+    <app-modal title="Alterar senha", (closeRequest)="onCloseModal()">
+
+        <form class="forgot-modal-content" [formGroup]="changePassForm">
+            <div class="forgot-modal-body">
+                <h2>Digite sua nova senha</h2>
+
+                <input class="form-input" formControlName="password" type="password" placeholder="Senha">
+                <input class="form-input" formControlName="confirmPassword" type="password" placeholder="Confirme sua senha">
+
+                <span style="color: var(--color-error); font-weight: 600;">{{errorForgotMessage()}}</span>
+                @if (successForgotMessage()) 
+                {
+                    <span class="success-message">Sua senha foi alterada com sucesso!</span>
+                }
+            </div>
+            
+            <div class="modal-footer">
+                <button (click)="onCloseModal()" class="modal-btn cancel">Cancelar</button>
+                <button (click)="onConfirmChangePassword()" class="modal-btn confirm">Confirmar</button>
+            </div>
+        </form>
+
+    </app-modal>
 }

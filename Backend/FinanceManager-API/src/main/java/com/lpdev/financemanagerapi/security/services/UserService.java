@@ -7,10 +7,7 @@ import com.lpdev.financemanagerapi.microservices.email.EmailService;
 import com.lpdev.financemanagerapi.model.entities.Transaction;
 import com.lpdev.financemanagerapi.model.entities.Wallet;
 import com.lpdev.financemanagerapi.repositories.WalletRepository;
-import com.lpdev.financemanagerapi.security.DTO.LoginDTO;
-import com.lpdev.financemanagerapi.security.DTO.LoginResponseDTO;
-import com.lpdev.financemanagerapi.security.DTO.RegisterDTO;
-import com.lpdev.financemanagerapi.security.DTO.RegisterResponseDTO;
+import com.lpdev.financemanagerapi.security.DTO.*;
 import com.lpdev.financemanagerapi.security.model.entities.User;
 import com.lpdev.financemanagerapi.security.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Slf4j
@@ -102,16 +100,10 @@ public class UserService {
                 -> new FinanceManagerNotFoundException("Not found user authenticated with email: " + email));
     }
 
-    public void addTransaction (Transaction transaction){
-        User user = findUserByAuth();
-        user.addTransaction(transaction);
-        userRepository.save(user);
-    }
-
     @Transactional
     public void verifyAccount(String token){
 
-        User user = userRepository.findUserByRecoveryToken(token).orElseThrow(
+        User user = userRepository.findUserByVerificationCode(token).orElseThrow(
                 () -> new FinanceManagerNotFoundException("Not found any user with this token"));
 
         if (user.isEnabled()){
@@ -142,5 +134,50 @@ public class UserService {
         log.info("User {} enabled successfully", user.getEmail());
     }
 
+    @Transactional
+    public void forgotPassword(String email){
+
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new FinanceManagerNotFoundException("Not found user with email" + email));
+        log.info("Encontrado user {} com o email {} -> para recuperação de senha", user.getFirstName(), email);
+
+        String recoveryToken = UUID.randomUUID().toString();
+        String link = frontend_url + "/?recoveryToken=" + recoveryToken;
+        String subject = "Seu pedido de recuperação de senha - FinanceManager";
+        String emailBody = String.format("""
+                <p>Olá, %s </p>
+                <p>Recebemos seu pedido para recuperar sua senha!</p>
+                <p>Clique no link abaixo para alterar sua senha.</p>
+                <a href="%s">Clique para ativar sua conta!</a>
+                """, user.getFirstName(), link);
+
+        user.setRecoveryToken(recoveryToken);
+        user.setRecoveryTokenExpiry(Instant.now().plusSeconds(1800)); // 30 mins
+
+        userRepository.save(user);
+
+        emailService.sendEmail(email, subject, emailBody);
+        log.info("Email de recuperação de senha enviado para {}!", user.getFirstName());
+    }
+
+    @Transactional
+    public void changePassword(ChangePasswordDTO dto){
+
+        User user = userRepository.findUserByRecoveryToken(dto.recoveryToken()).orElseThrow(
+                () -> new FinanceManagerNotFoundException("Not found any user with this recovery token"));
+
+        if (user.getRecoveryTokenExpiry().isBefore(Instant.now())){
+            throw new FinanceManagerBadRequestException("The recovery token has expired!");
+        }
+
+        log.info("Mudando a senha do usuario {}", user.getFirstName());
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+
+        user.setRecoveryToken(null);
+        user.setRecoveryTokenExpiry(null);
+
+        userRepository.save(user);
+        log.info("Senha do usuario {} foi alterada com sucesso!", user.getFirstName());
+    }
 
 }

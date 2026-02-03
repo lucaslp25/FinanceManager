@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { LoginDTO, LoginResponseDTO, RegisterDTO, RegisterResponseDTO } from '../models/auth';
+import { ChangePasswordDTO, LoginDTO, LoginResponseDTO, RegisterDTO, RegisterResponseDTO } from '../models/auth';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -33,6 +33,16 @@ export class AuthService {
     .pipe(catchError(this.handleError));
   }
   
+  forgotPassword(email: string): Observable<any>{
+    return this.http.post<any>(`${this.baseURL}/${email}/password-recovery`, email)
+    .pipe(catchError(this.handleError));
+  }
+  
+  resetPasswrod(dto: ChangePasswordDTO): Observable<any>{
+    return this.http.patch<any>(`${this.baseURL}/password-recovery`, dto)
+    .pipe(catchError(this.handleError));
+  }
+
   handleError(err: any){
     console.error('FinanceAutentication Error: ', err);
     return throwError(() => err);
